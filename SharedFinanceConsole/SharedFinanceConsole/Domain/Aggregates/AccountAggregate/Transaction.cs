@@ -22,22 +22,22 @@ namespace SharedFinanceConsole.Domain.Aggregates.AccountAggregate
 
         public static Transaction CreateExpense(decimal value, string description)
         {
-            return new(+value, ETransactionType.EXPENSE, description, null);
+            return new(-value, ETransactionType.EXPENSE, description, null);
         }
 
-        public static Transaction CreateReceivable(decimal value, string description, Guid? counterparty)
+        public static Transaction CreateReceivable(decimal value, string description, Guid? counterpartyUserId)
         {
-            return new(-value, ETransactionType.RECEIVABLE, description, counterparty);
+            return new(+value, ETransactionType.RECEIVABLE, description, counterpartyUserId);
         }
 
-        public static Transaction CreateTransferIn(decimal value, string description, Guid counterparty)
+        public static Transaction CreateTransferOut(decimal value, string description, Guid counterpartyUserId)
         {
-            return new(+value, ETransactionType.TRANSFER_IN, description, counterparty);
+            return new(-value, ETransactionType.TRANSFER_OUT, description, counterpartyUserId);
         }
 
-        public static Transaction CreateTransferOut(decimal value, string description, Guid counterparty)
+        public static Transaction CreateTransferIn(decimal value, string description, Guid counterpartyUserId)
         {
-            return new(+value, ETransactionType.TRANSFER_IN, description, counterparty);
+            return new(+value, ETransactionType.TRANSFER_IN, description, counterpartyUserId);
         }
     }
 }

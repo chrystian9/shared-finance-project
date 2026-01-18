@@ -29,16 +29,10 @@ namespace SharedFinanceConsole.Domain.Aggregates.AccountAggregate
 
             foreach (var counterparty in counterparties)
             {
-                var value = Decimal.Round(
-                    totalValue * counterparty.Percentage,
-                    2,
-                    MidpointRounding.AwayFromZero
-                );
-
-                _transactions.Add
-                    (Transaction.CreateReceivable(
-                        value, 
-                        description, 
+                _transactions.Add(
+                    Transaction.CreateReceivable(
+                        counterparty.GetValue(totalValue),
+                        description,
                         counterparty.UserId)
                     );
             }
@@ -48,7 +42,12 @@ namespace SharedFinanceConsole.Domain.Aggregates.AccountAggregate
             string description,
             Guid userId)
         {
-            _transactions.Add(Transaction.CreateTransferOut(value, description, userId));
+            _transactions.Add(
+                Transaction.CreateTransferOut(
+                    value, 
+                    description, 
+                    userId)
+                );
         }
     }
 }
