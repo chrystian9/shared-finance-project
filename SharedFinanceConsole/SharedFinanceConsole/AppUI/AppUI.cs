@@ -1,5 +1,4 @@
 ﻿using SharedFinanceConsole.Application;
-using SharedFinanceConsole.Domain.Aggregates.AccountAggregate.ValueObjects;
 
 namespace SharedFinanceConsole.AppUI
 {
@@ -11,29 +10,95 @@ namespace SharedFinanceConsole.AppUI
 
             var sharedFinanceApp = new SharedFinanceAppService();
 
-            Console.WriteLine("Add users...");
+            var systemControl = true;
 
-            var user1Id = sharedFinanceApp.AddUser("User1");
-            sharedFinanceApp.AddAccount(user1Id);
+            while (systemControl)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Menu");
+                Console.WriteLine("1. Add user");
+                Console.WriteLine("2. Remove user");
+                Console.WriteLine("3. User balance");
+                Console.WriteLine("4. Add expense to user");
+                Console.WriteLine("5. Add receivable to user");
+                Console.WriteLine("6. Create transfer between users");
+                Console.WriteLine("7. Exit");
 
-            var user2Id = sharedFinanceApp.AddUser("User2");
-            sharedFinanceApp.AddAccount(user2Id);
+                var value = Console.ReadLine();
 
-            var user3Id = sharedFinanceApp.AddUser("User3");
-            sharedFinanceApp.AddAccount(user3Id);
-
-            foreach (var user in sharedFinanceApp._usersById.Values)
-                Console.WriteLine($"User added: {user.Name} (Id: {user.Id}) (Balance: {sharedFinanceApp._accountsByUserId[user.Id].GetBalance()})");
-
-            Console.WriteLine("Add 100 expense to User1 with 40 percente counterparty by User2 and 20 percente counterparty by User3...");
-
-            sharedFinanceApp.RegisterExpense(user1Id,
-                100,
-                "Test expense",
-                [new TransactionCounterparty(user2Id, 0.4m), new TransactionCounterparty(user3Id, 0.2m)]);
+                switch (value)
+                {
+                    case "1": AddUser(sharedFinanceApp); break;
+                    case "2": RemoveUser(sharedFinanceApp); break;
+                    case "3": UserBalance(sharedFinanceApp); break;
+                    case "4": AddExpenseToUser(sharedFinanceApp); break;
+                    case "5": AddReceivableToUser(sharedFinanceApp); break;
+                    case "6": CreateTransferBetweenUsers(sharedFinanceApp); break;
+                    case "7": systemControl = false; break;
+                }
+            }
 
             foreach (var user in sharedFinanceApp._usersById.Values)
                 Console.WriteLine($"User result: {user.Name} (Id: {user.Id}) (Balance: {sharedFinanceApp._accountsByUserId[user.Id].GetBalance()})");
+
+            Console.WriteLine("Finished system...");
+        }
+
+        private void AddUser(SharedFinanceAppService sharedFinanceApp)
+        {
+            Console.WriteLine("Write user name:");
+
+            var inputValue = Console.ReadLine();
+
+            if (inputValue == null)
+                return;
+
+            var userId = sharedFinanceApp.AddUser(inputValue);
+
+            Console.WriteLine($"User ID: {userId}");
+
+            var accountId = sharedFinanceApp.AddAccount(userId);
+
+            Console.WriteLine($"User account ID: {accountId}");
+        }
+
+        private void RemoveUser(SharedFinanceAppService sharedFinanceApp)
+        {
+            try
+            {
+                Console.WriteLine("Write user ID:");
+
+                var inputValue = Console.ReadLine();
+
+                if (inputValue == null)
+                    return;
+
+                // sharedFinanceApp.RemoveUser(inputValue);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in process: {ex.Message}");
+            }
+        }
+
+        private void UserBalance(SharedFinanceAppService sharedFinanceApp)
+        {
+            // TODO
+        }
+
+        private void AddExpenseToUser(SharedFinanceAppService sharedFinanceApp)
+        {
+            // TODO
+        }
+
+        private void AddReceivableToUser(SharedFinanceAppService sharedFinanceApp)
+        {
+            // TODO
+        }
+
+        private void CreateTransferBetweenUsers(SharedFinanceAppService sharedFinanceApp)
+        {
+            // TODO
         }
     }
 }
