@@ -2,7 +2,7 @@
 
 namespace SharedFinanceConsole.AppUI
 {
-    public class AppUI
+    public class ConsoleUI
     {
         public void RunApp()
         {
