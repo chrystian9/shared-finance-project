@@ -1,104 +1,122 @@
-﻿using SharedFinanceConsole.Application;
+﻿using SharedFinanceConsole.Application.Services;
+using SharedFinanceConsole.ConsoleUI.Interfaces;
+using SharedFinanceConsole.ConsoleUI.MenuCommands;
 
-namespace SharedFinanceConsole.AppUI
+namespace SharedFinanceConsole.ConsoleUI
 {
     public class ConsoleUI
     {
+        private readonly AppController _appController = new();
+        private readonly SharedFinanceAppService _appService = new();
+        private readonly IList<IMenuCommand> _commands;
+
+        public ConsoleUI()
+        {
+            ShowLogo();
+
+            _commands =
+            [
+                 new AddUserMenuCommand(_appService),
+                 new ReportMenuCommand(_appService),
+                 new ExitMenuCommand(_appController)
+            ];
+        }
+
         public void RunApp()
         {
-            Console.WriteLine("Initial system");
-
-            var sharedFinanceApp = new SharedFinanceAppService();
-
-            var systemControl = true;
-
-            while (systemControl)
+            while (_appController.IsRunning)
             {
-                Console.WriteLine();
-                Console.WriteLine("Menu");
-                Console.WriteLine("1. Add user");
-                Console.WriteLine("2. Remove user");
-                Console.WriteLine("3. User balance");
-                Console.WriteLine("4. Add expense to user");
-                Console.WriteLine("5. Add receivable to user");
-                Console.WriteLine("6. Create transfer between users");
-                Console.WriteLine("7. Exit");
+                Console.Clear();
 
-                var value = Console.ReadLine();
+                ShowMenu();
 
-                switch (value)
+                var input = ReadOption();
+
+                if (int.TryParse(input, out int option) && option > 0 && option <= _commands.Count)
                 {
-                    case "1": AddUser(sharedFinanceApp); break;
-                    case "2": RemoveUser(sharedFinanceApp); break;
-                    case "3": UserBalance(sharedFinanceApp); break;
-                    case "4": AddExpenseToUser(sharedFinanceApp); break;
-                    case "5": AddReceivableToUser(sharedFinanceApp); break;
-                    case "6": CreateTransferBetweenUsers(sharedFinanceApp); break;
-                    case "7": systemControl = false; break;
+                    _commands[option - 1].Execute();
+                }
+                else
+                {
+                    Console.WriteLine("❌ Invalid option!");
                 }
             }
 
-            foreach (var user in sharedFinanceApp._usersById.Values)
-                Console.WriteLine($"User result: {user.Name} (Id: {user.Id}) (Balance: {sharedFinanceApp._accountsByUserId[user.Id].GetBalance()})");
-
-            Console.WriteLine("Finished system...");
+            ShowFinalReport();
         }
 
-        private void AddUser(SharedFinanceAppService sharedFinanceApp)
+        #region Logo
+        private static void ShowLogo()
         {
-            Console.WriteLine("Write user name:");
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
 
-            var inputValue = Console.ReadLine();
+            TypeWrite(@"
+               ███████╗██╗  ██╗ █████╗ ██████╗ ███████╗██████╗ 
+               ██╔════╝██║  ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗
+               ███████╗███████║███████║██████╔╝█████╗  ██║  ██║
+               ╚════██║██╔══██║██╔══██║██╔══██╗██╔══╝  ██║  ██║
+               ███████║██║  ██║██║  ██║██║  ██║███████╗██████╔╝
+               ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═════╝ 
+                        SHARED FINANCE SYSTEM
+                ");
 
-            if (inputValue == null)
-                return;
-
-            var userId = sharedFinanceApp.AddUser(inputValue);
-
-            Console.WriteLine($"User ID: {userId}");
-
-            var accountId = sharedFinanceApp.AddAccount(userId);
-
-            Console.WriteLine($"User account ID: {accountId}");
+            Console.ResetColor();
+            ShowLoading();
         }
 
-        private void RemoveUser(SharedFinanceAppService sharedFinanceApp)
+        private static void TypeWrite(string text)
         {
-            try
+            foreach (var c in text)
             {
-                Console.WriteLine("Write user ID:");
-
-                var inputValue = Console.ReadLine();
-
-                if (inputValue == null)
-                    return;
-
-                // sharedFinanceApp.RemoveUser(inputValue);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error in process: {ex.Message}");
+                Console.Write(c);
+                Thread.Sleep(1);
             }
         }
 
-        private void UserBalance(SharedFinanceAppService sharedFinanceApp)
+        private static void ShowLoading()
         {
-            // TODO
+            Console.Write("Loading");
+
+            for (int i = 0; i < 3; i++)
+            {
+                Thread.Sleep(500);
+                Console.Write(".");
+            }
+
+            Thread.Sleep(500);
+        }
+        #endregion
+
+        #region Menu
+        private void ShowMenu()
+        {
+            Console.WriteLine();
+
+            for (int i = 0; i < _commands.Count; i++)
+            {
+                Console.WriteLine($"{i + 1} - {_commands[i].Label}");
+            }
+
+            Console.WriteLine();
+            Console.Write("Select an option: ");
         }
 
-        private void AddExpenseToUser(SharedFinanceAppService sharedFinanceApp)
+        private static string ReadOption()
         {
-            // TODO
+            return Console.ReadLine()?.Trim() ?? "";
         }
 
-        private void AddReceivableToUser(SharedFinanceAppService sharedFinanceApp)
+        private void ShowFinalReport()
         {
-            // TODO
-        }
+            Console.Clear();
+            Console.WriteLine("===== FINAL USERS BALANCE =====");
 
-        private void CreateTransferBetweenUsers(SharedFinanceAppService sharedFinanceApp)
-        {
-            // TODO
+            _commands.OfType<ReportMenuCommand>().Single().Execute();
+
+            Console.WriteLine();
+            Console.WriteLine("System finished.");
         }
+        #endregion
     }
 }

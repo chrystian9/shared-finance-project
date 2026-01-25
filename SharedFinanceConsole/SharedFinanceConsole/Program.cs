@@ -1,4 +1,4 @@
-﻿using SharedFinanceConsole.AppUI;
+﻿using SharedFinanceConsole.ConsoleUI;
 
 var app = new ConsoleUI();
 

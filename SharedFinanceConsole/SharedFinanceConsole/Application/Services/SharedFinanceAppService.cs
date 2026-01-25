@@ -2,7 +2,7 @@
 using SharedFinanceConsole.Domain.Aggregates.AccountAggregate.ValueObjects;
 using SharedFinanceConsole.Domain.Aggregates.UserAggregate;
 
-namespace SharedFinanceConsole.Application
+namespace SharedFinanceConsole.Application.Services
 {
     public class SharedFinanceAppService
     {
