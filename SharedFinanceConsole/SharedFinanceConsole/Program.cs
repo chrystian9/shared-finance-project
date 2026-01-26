@@ -1,5 +1,14 @@
-﻿using SharedFinanceConsole.ConsoleUI;
+﻿using SharedFinanceConsole.Application.Services;
+using SharedFinanceConsole.ConsoleUI;
+using SharedFinanceConsole.Infrastructure.Repositories;
 
-var app = new ConsoleUI();
+var userRepository = new UserRepository();
+var accountRepository = new AccountRepository();
 
-app.RunApp();
+var appService = new SharedFinanceAppService(userRepository, accountRepository);
+
+var appController = new AppController();
+
+var ui = new ConsoleUI(appController, appService);
+
+ui.RunApp();

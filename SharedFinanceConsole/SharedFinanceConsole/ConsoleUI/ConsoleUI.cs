@@ -4,27 +4,19 @@ using SharedFinanceConsole.ConsoleUI.MenuCommands;
 
 namespace SharedFinanceConsole.ConsoleUI
 {
-    public class ConsoleUI
+    public class ConsoleUI(AppController appController, SharedFinanceAppService appService)
     {
-        private readonly AppController _appController = new();
-        private readonly SharedFinanceAppService _appService = new();
-        private readonly IList<IMenuCommand> _commands;
-
-        public ConsoleUI()
-        {
-            ShowLogo();
-
-            _commands =
-            [
-                 new AddUserMenuCommand(_appService),
-                 new ReportMenuCommand(_appService),
-                 new ExitMenuCommand(_appController)
-            ];
-        }
+        private readonly IList<IMenuCommand> _commands = [
+            new AddUserMenuCommand(appService),
+            new ReportMenuCommand(appService),
+            new ExitMenuCommand(appController)
+        ];
 
         public void RunApp()
         {
-            while (_appController.IsRunning)
+            ShowLogo();
+
+            while (appController.IsRunning)
             {
                 Console.Clear();
 
@@ -33,13 +25,12 @@ namespace SharedFinanceConsole.ConsoleUI
                 var input = ReadOption();
 
                 if (int.TryParse(input, out int option) && option > 0 && option <= _commands.Count)
-                {
                     _commands[option - 1].Execute();
-                }
                 else
-                {
                     Console.WriteLine("❌ Invalid option!");
-                }
+
+                if (appController.IsRunning)
+                    Pause();
             }
 
             ShowFinalReport();
@@ -105,6 +96,12 @@ namespace SharedFinanceConsole.ConsoleUI
         private static string ReadOption()
         {
             return Console.ReadLine()?.Trim() ?? "";
+        }
+        private static void Pause()
+        {
+            Console.WriteLine();
+            Console.WriteLine("Press ENTER to continue...");
+            Console.ReadLine();
         }
 
         private void ShowFinalReport()

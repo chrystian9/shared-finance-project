@@ -9,16 +9,17 @@ namespace SharedFinanceConsole.ConsoleUI.MenuCommands
 
         public void Execute()
         {
-            if (appService._usersById.Values.Count == 0)
+            var usersBalances = appService.GetUsersBalances();
+
+            if (!usersBalances.Any())
             {
                 Console.WriteLine("No has users");
                 return;
             }
 
-            foreach (var user in appService._usersById.Values)
+            foreach (var userBalance in usersBalances)
             {
-                var balance = appService._accountsByUserId[user.Id].GetBalance();
-                Console.WriteLine($"{user.Name} (Id: {user.Id}) - Balance: {balance}");
+                Console.WriteLine($"{userBalance.UserName} (Id: {userBalance.UserId}) - Balance: {userBalance.Balance}");
             }
         }
     }

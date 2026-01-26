@@ -1,19 +1,21 @@
-﻿using SharedFinanceConsole.Domain.Aggregates.AccountAggregate;
+﻿using SharedFinanceConsole.Application.DataContracts.Responses;
+using SharedFinanceConsole.Application.Interfaces.Repositories;
+using SharedFinanceConsole.Domain.Aggregates.AccountAggregate;
 using SharedFinanceConsole.Domain.Aggregates.AccountAggregate.ValueObjects;
 using SharedFinanceConsole.Domain.Aggregates.UserAggregate;
 
 namespace SharedFinanceConsole.Application.Services
 {
-    public class SharedFinanceAppService
+    public class SharedFinanceAppService(IUserRepository userRepository, IAccountRepository accountRepository)
     {
-        public readonly IDictionary<Guid, User> _usersById = new Dictionary<Guid, User>();
-        public readonly IDictionary<Guid, Account> _accountsByUserId = new Dictionary<Guid, Account>();
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly IAccountRepository _accountRepository = accountRepository;
 
         public Guid AddUser(string name)
         {
             var user = new User(name);
 
-            _usersById.Add(user.Id, user);
+            _userRepository.Add(user);
 
             return user.Id;
         }
@@ -22,7 +24,7 @@ namespace SharedFinanceConsole.Application.Services
         {
             var account = new Account(userId);
 
-            _accountsByUserId.Add(account.UserId, account);
+            _accountRepository.Add(account);
 
             return account.Id;
         }
@@ -32,20 +34,48 @@ namespace SharedFinanceConsole.Application.Services
             string description,
             IEnumerable<TransactionCounterparty> counterparties)
         {
-            var payerAccount = _accountsByUserId[payerUserId];
+            var payerAccount = _accountRepository.GetById(payerUserId);
 
             payerAccount.RegisterExpense(totalValue, description, counterparties);
 
+            _accountRepository.Save(payerAccount);
+
             foreach (var counterparty in counterparties)
             {
-                var counterpartyAccount = _accountsByUserId[counterparty.UserId];
+                var counterpartyAccount = _accountRepository.GetById(counterparty.UserId);
 
                 counterpartyAccount.RegisterTransfer(
                     counterparty.GetValue(totalValue),
                     description,
                     counterparty.UserId
                 );
+
+                _accountRepository.Save(counterpartyAccount);
             }
+        }
+
+        public IEnumerable<UserBalanceResponse> GetUsersBalances()
+        {
+            var users = _userRepository.GetAll();
+            var accountsByUserId = _accountRepository.GetAll()
+                .ToDictionary(a => a.UserId, a => a);
+
+            var response = new List<UserBalanceResponse>();
+
+            foreach (var user in users)
+            {
+                if (accountsByUserId.TryGetValue(user.Id, out var account))
+                {
+                    response.Add(new UserBalanceResponse()
+                    {
+                        Balance = account.GetBalance(),
+                        UserId = user.Id,
+                        UserName = user.Name,
+                    });
+                }
+            }
+
+            return response;
         }
     }
 }
