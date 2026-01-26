@@ -29,12 +29,12 @@ namespace SharedFinanceConsole.Application.Services
             return account.Id;
         }
 
-        public void RegisterExpense(Guid payerUserId,
+        public void RegisterExpense(Guid payerAccountId,
             decimal totalValue,
             string description,
             IEnumerable<TransactionCounterparty> counterparties)
         {
-            var payerAccount = _accountRepository.GetById(payerUserId);
+            var payerAccount = _accountRepository.GetById(payerAccountId);
 
             payerAccount.RegisterExpense(totalValue, description, counterparties);
 
@@ -42,12 +42,12 @@ namespace SharedFinanceConsole.Application.Services
 
             foreach (var counterparty in counterparties)
             {
-                var counterpartyAccount = _accountRepository.GetById(counterparty.UserId);
+                var counterpartyAccount = _accountRepository.GetById(counterparty.AccountId);
 
                 counterpartyAccount.RegisterTransfer(
                     counterparty.GetValue(totalValue),
                     description,
-                    counterparty.UserId
+                    counterparty.AccountId
                 );
 
                 _accountRepository.Save(counterpartyAccount);

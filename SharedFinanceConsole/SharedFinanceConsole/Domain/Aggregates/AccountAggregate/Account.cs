@@ -33,7 +33,7 @@ namespace SharedFinanceConsole.Domain.Aggregates.AccountAggregate
                     Transaction.CreateReceivable(
                         counterparty.GetValue(totalValue),
                         description,
-                        counterparty.UserId)
+                        counterparty.AccountId)
                     );
             }
         }
