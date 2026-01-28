@@ -1,5 +1,5 @@
 ﻿using SharedFinanceConsole.Application.DataContracts.Responses;
-using SharedFinanceConsole.Application.Interfaces.Repositories;
+using SharedFinanceConsole.Application.Repositories;
 using SharedFinanceConsole.Domain.Aggregates.AccountAggregate;
 using SharedFinanceConsole.Domain.Aggregates.AccountAggregate.ValueObjects;
 using SharedFinanceConsole.Domain.Aggregates.UserAggregate;
@@ -10,24 +10,6 @@ namespace SharedFinanceConsole.Application.Services
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IAccountRepository _accountRepository = accountRepository;
-
-        public Guid AddUser(string name)
-        {
-            var user = new User(name);
-
-            _userRepository.Add(user);
-
-            return user.Id;
-        }
-
-        public Guid AddAccount(Guid userId)
-        {
-            var account = new Account(userId);
-
-            _accountRepository.Add(account);
-
-            return account.Id;
-        }
 
         public void RegisterExpense(Guid payerAccountId,
             decimal totalValue,

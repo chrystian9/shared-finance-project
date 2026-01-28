@@ -7,7 +7,7 @@ namespace SharedFinanceConsole.ConsoleUI
     public class ConsoleUI(AppController appController, SharedFinanceAppService appService)
     {
         private readonly IList<IMenuCommand> _commands = [
-            new AddUserMenuCommand(appService),
+            new AddUserMenuCommand(appController),
             new ReportMenuCommand(appService),
             new RegisterExpenseMenuCommand(appService),
             new ExitMenuCommand(appController)

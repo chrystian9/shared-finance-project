@@ -1,4 +1,4 @@
-﻿using SharedFinanceConsole.Application.Interfaces.Repositories;
+﻿using SharedFinanceConsole.Application.Repositories;
 
 namespace SharedFinanceConsole.Infrastructure.Repositories.Abstract
 {

@@ -1,9 +1,9 @@
-﻿using SharedFinanceConsole.Application.Services;
+﻿using SharedFinanceConsole.Application.Commands;
 using SharedFinanceConsole.ConsoleUI.Interfaces;
 
 namespace SharedFinanceConsole.ConsoleUI.MenuCommands
 {
-    public class AddUserMenuCommand(SharedFinanceAppService appService) : IMenuCommand
+    public class AddUserMenuCommand(AppController appController) : IMenuCommand
     {
         public string Label => "Add user";
 
@@ -16,11 +16,11 @@ namespace SharedFinanceConsole.ConsoleUI.MenuCommands
             if (inputValue == null)
                 return;
 
-            var userId = appService.AddUser(inputValue);
+            var userId = appController.Send(new AddUserCommand(inputValue));
 
             Console.WriteLine($"User ID: {userId}");
 
-            var accountId = appService.AddAccount(userId);
+            var accountId = appController.Send(new AddAccountCommand(userId));
 
             Console.WriteLine($"User account ID: {accountId}");
         }

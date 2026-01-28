@@ -1,4 +1,4 @@
-﻿namespace SharedFinanceConsole.Application.Interfaces.Repositories
+﻿namespace SharedFinanceConsole.Application.Repositories
 {
     public interface IRepository<T>
     {

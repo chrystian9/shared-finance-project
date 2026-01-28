@@ -1,4 +1,4 @@
-﻿using SharedFinanceConsole.Application.Interfaces.Repositories;
+﻿using SharedFinanceConsole.Application.Repositories;
 using SharedFinanceConsole.Domain.Aggregates.UserAggregate;
 using SharedFinanceConsole.Infrastructure.Repositories.Abstract;
 
