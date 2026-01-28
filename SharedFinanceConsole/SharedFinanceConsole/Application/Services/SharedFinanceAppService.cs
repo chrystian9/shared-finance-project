@@ -1,8 +1,5 @@
 ﻿using SharedFinanceConsole.Application.DataContracts.Responses;
 using SharedFinanceConsole.Application.Repositories;
-using SharedFinanceConsole.Domain.Aggregates.AccountAggregate;
-using SharedFinanceConsole.Domain.Aggregates.AccountAggregate.ValueObjects;
-using SharedFinanceConsole.Domain.Aggregates.UserAggregate;
 
 namespace SharedFinanceConsole.Application.Services
 {
@@ -10,31 +7,6 @@ namespace SharedFinanceConsole.Application.Services
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IAccountRepository _accountRepository = accountRepository;
-
-        public void RegisterExpense(Guid payerAccountId,
-            decimal totalValue,
-            string description,
-            IEnumerable<TransactionCounterparty> counterparties)
-        {
-            var payerAccount = _accountRepository.GetById(payerAccountId);
-
-            payerAccount.RegisterExpense(totalValue, description, counterparties);
-
-            _accountRepository.Save(payerAccount);
-
-            foreach (var counterparty in counterparties)
-            {
-                var counterpartyAccount = _accountRepository.GetById(counterparty.AccountId);
-
-                counterpartyAccount.RegisterTransfer(
-                    counterparty.GetValue(totalValue),
-                    description,
-                    counterparty.AccountId
-                );
-
-                _accountRepository.Save(counterpartyAccount);
-            }
-        }
 
         public IEnumerable<UserBalanceResponse> GetUsersBalances()
         {

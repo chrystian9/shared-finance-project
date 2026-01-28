@@ -12,6 +12,7 @@ var appController = new AppController();
 
 appController.RegisterHandler(new AddUserCommandHandler(userRepository));
 appController.RegisterHandler(new AddAccountCommandHandler(accountRepository));
+appController.RegisterHandler(new RegisterExpenseCommandHandler(accountRepository));
 
 var ui = new ConsoleUI(appController, appService);
 

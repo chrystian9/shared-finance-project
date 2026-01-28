@@ -1,10 +1,10 @@
-﻿using SharedFinanceConsole.Application.Services;
+﻿using SharedFinanceConsole.Application.Commands;
 using SharedFinanceConsole.ConsoleUI.Interfaces;
 using SharedFinanceConsole.Domain.Aggregates.AccountAggregate.ValueObjects;
 
 namespace SharedFinanceConsole.ConsoleUI.MenuCommands
 {
-    public class RegisterExpenseMenuCommand(SharedFinanceAppService appService) : IMenuCommand
+    public class RegisterExpenseMenuCommand(AppController appController) : IMenuCommand
     {
         public string Label => "Register expense";
 
@@ -65,9 +65,9 @@ namespace SharedFinanceConsole.ConsoleUI.MenuCommands
 
                     var percentageInput = Console.ReadLine();
 
-                    if (percentageInput == null 
+                    if (percentageInput == null
                         || !decimal.TryParse(percentageInput, out var percentage)
-                        || percentage <= 0 
+                        || percentage <= 0
                         || percentage > 1)
                         Console.WriteLine("❌ Invalid percentage!");
                     else
@@ -104,10 +104,13 @@ namespace SharedFinanceConsole.ConsoleUI.MenuCommands
                 return;
             }
 
-            appService.RegisterExpense(accountId,
-                totalValue,
-                description,
-                counterparties);
+            appController.Send(new RegisterExpenseCommand()
+            {
+                PayerAccountId = accountId,
+                TotalValue = totalValue,
+                Description = description,
+                Counterparties = counterparties
+            });
 
             Console.WriteLine("Finished operation");
         }
