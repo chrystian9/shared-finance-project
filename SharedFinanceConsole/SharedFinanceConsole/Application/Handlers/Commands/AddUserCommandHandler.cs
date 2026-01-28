@@ -3,7 +3,7 @@ using SharedFinanceConsole.Application.Commands;
 using SharedFinanceConsole.Application.Repositories;
 using SharedFinanceConsole.Domain.Aggregates.UserAggregate;
 
-namespace SharedFinanceConsole.Application.Handlers
+namespace SharedFinanceConsole.Application.Handlers.Commands
 {
     public class AddUserCommandHandler(IUserRepository userRepository) : IRequestHandler<AddUserCommand, Guid>
     {

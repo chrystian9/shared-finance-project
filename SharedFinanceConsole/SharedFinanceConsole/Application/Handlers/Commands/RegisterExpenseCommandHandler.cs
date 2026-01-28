@@ -2,7 +2,7 @@
 using SharedFinanceConsole.Application.Commands;
 using SharedFinanceConsole.Application.Repositories;
 
-namespace SharedFinanceConsole.Application.Handlers
+namespace SharedFinanceConsole.Application.Handlers.Commands
 {
     public class RegisterExpenseCommandHandler(IAccountRepository accountRepository) : IRequestHandler<RegisterExpenseCommand, Unit>
     {
