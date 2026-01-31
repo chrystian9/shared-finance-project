@@ -16,6 +16,6 @@ appController.RegisterHandler(new AddAccountCommandHandler(accountRepository));
 appController.RegisterHandler(new RegisterExpenseCommandHandler(accountRepository));
 appController.RegisterHandler(new GetUsersBalancesQueryHandler(userRepository, accountRepository));
 
-var ui = new ConsoleUI(appController, appService);
+var ui = new Menu(appController, appService);
 
 ui.RunApp();

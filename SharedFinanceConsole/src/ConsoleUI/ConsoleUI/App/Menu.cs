@@ -1,15 +1,15 @@
-﻿using SharedFinanceConsole.Application.Services;
-using SharedFinanceConsole.ConsoleUI.Interfaces;
+﻿using ConsoleUI.UICommands.Interfaces;
+using SharedFinanceConsole.Application.Services;
 using SharedFinanceConsole.ConsoleUI.MenuCommands;
 
 namespace SharedFinanceConsole.ConsoleUI
 {
-    public class ConsoleUI(AppController appController, SharedFinanceAppService appService)
+    public class Menu(AppController appController, SharedFinanceAppService appService)
     {
         private readonly IList<IMenuCommand> _commands = [
             new AddUserMenuCommand(appController),
             new ReportMenuCommand(appService),
-            new RegisterExpenseMenuCommand(appService),
+            new RegisterExpenseMenuCommand(appController),
             new ExitMenuCommand(appController)
         ];
 

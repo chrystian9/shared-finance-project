@@ -1,4 +1,4 @@
-﻿namespace SharedFinanceConsole.ConsoleUI.Interfaces
+﻿namespace ConsoleUI.UICommands.Interfaces
 {
     public interface IMenuCommand
     {

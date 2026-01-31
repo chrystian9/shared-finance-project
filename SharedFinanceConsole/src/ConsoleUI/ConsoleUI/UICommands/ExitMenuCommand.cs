@@ -1,4 +1,4 @@
-﻿using SharedFinanceConsole.ConsoleUI.Interfaces;
+﻿using ConsoleUI.UICommands.Interfaces;
 
 namespace SharedFinanceConsole.ConsoleUI.MenuCommands
 {

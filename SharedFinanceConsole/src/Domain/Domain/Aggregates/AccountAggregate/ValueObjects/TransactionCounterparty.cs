@@ -18,7 +18,7 @@ namespace SharedFinanceConsole.Domain.Aggregates.AccountAggregate.ValueObjects
 
         public decimal GetValue(decimal totalValue)
         {
-            return Decimal.Round(
+            return decimal.Round(
                 totalValue * Percentage,
                 2,
                 MidpointRounding.AwayFromZero

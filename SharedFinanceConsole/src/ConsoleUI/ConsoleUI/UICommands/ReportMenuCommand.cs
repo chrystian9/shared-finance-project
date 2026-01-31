@@ -1,5 +1,5 @@
-﻿using SharedFinanceConsole.Application.Services;
-using SharedFinanceConsole.ConsoleUI.Interfaces;
+﻿using ConsoleUI.UICommands.Interfaces;
+using SharedFinanceConsole.Application.Services;
 
 namespace SharedFinanceConsole.ConsoleUI.MenuCommands
 {
