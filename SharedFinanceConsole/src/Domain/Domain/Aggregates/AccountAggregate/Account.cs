@@ -49,5 +49,15 @@ namespace SharedFinanceConsole.Domain.Aggregates.AccountAggregate
                     userId)
                 );
         }
+
+        public void RegisterDeposit(decimal value,
+            string description)
+        {
+            _transactions.Add(
+                Transaction.CreateDeposit(
+                    value,
+                    description)
+                );
+        }
     }
 }

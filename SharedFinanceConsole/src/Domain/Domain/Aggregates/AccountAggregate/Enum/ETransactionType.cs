@@ -2,6 +2,7 @@
 {
     public enum ETransactionType
     {
+        DEPOSIT,
         RECEIVABLE,
         EXPENSE,
         TRANSFER_IN,

@@ -20,6 +20,11 @@ namespace SharedFinanceConsole.Domain.Aggregates.AccountAggregate
             Counterparty = counterparty;
         }
 
+        public static Transaction CreateDeposit(decimal value, string description)
+        {
+            return new(+value, ETransactionType.DEPOSIT, description, null);
+        }
+
         public static Transaction CreateExpense(decimal value, string description)
         {
             return new(-value, ETransactionType.EXPENSE, description, null);
