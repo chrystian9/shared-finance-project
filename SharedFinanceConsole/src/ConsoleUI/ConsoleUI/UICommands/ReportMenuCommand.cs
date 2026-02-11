@@ -1,15 +1,15 @@
 ﻿using ConsoleUI.UICommands.Interfaces;
-using SharedFinanceConsole.Application.Services;
+using SharedFinanceConsole.Application.Queries;
 
 namespace SharedFinanceConsole.ConsoleUI.MenuCommands
 {
-    public class ReportMenuCommand(SharedFinanceAppService appService) : IMenuCommand
+    public class ReportMenuCommand(AppController appController) : IMenuCommand
     {
         public string Label => "Report";
 
         public void Execute()
         {
-            var usersBalances = appService.GetUsersBalances();
+            var usersBalances = appController.Send(new GetUsersBalancesQuery());
 
             if (!usersBalances.Any())
             {
