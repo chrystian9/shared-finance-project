@@ -39,46 +39,6 @@ This project explores and applies:
 
 ---
 
-## 🏗️ Architecture (current)
-
-Layered structure:
-
-/src
-SharedFinance.Domain
-SharedFinance.Application
-SharedFinance.Infrastructure
-SharedFinance.ConsoleUI
-
-/tests
-SharedFinance.Domain.Tests
-SharedFinance.Application.Tests
-
-
-### Layers
-
-**Domain**
-- Entities: User, Account, Transaction, Split
-- Business rules
-- Value Objects (Money, Ids, etc.)
-
-**Application**
-- Commands
-- Queries
-- Handlers
-- Interfaces (Repositories, UnitOfWork)
-- Mediator (AppController)
-
-**Infrastructure**
-- In-memory repositories
-- Technical implementations
-
-**ConsoleUI**
-- Command-line interface
-- Interactive menu
-- User input/output
-
----
-
 ## 🔁 Evolution by Phases
 
 ### ✅ Phase 1 — Console + DDD + CQRS Light
