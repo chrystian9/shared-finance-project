@@ -31,7 +31,7 @@ This project explores and applies:
   - Domain Rules
 - CQRS (Command Query Responsibility Segregation) – light version
 - Command Pattern
-- Mediator Pattern (custom implementation)
+- Mediator Pattern
 - Repository Pattern
 - Clean Architecture (layered separation)
 - Unit Testing
