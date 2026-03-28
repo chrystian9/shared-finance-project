@@ -1,0 +1,48 @@
+﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Enum;
+
+namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
+{
+    public class Transaction
+    {
+        public decimal Value { get; init; }
+        public ETransactionType Type { get; init; }
+        public string Description { get; init; }
+        public Guid? Counterparty { get; init; }
+
+        public Transaction(decimal value,
+            ETransactionType type,
+            string description,
+            Guid? counterparty)
+        {
+            Value = value;
+            Type = type;
+            Description = description;
+            Counterparty = counterparty;
+        }
+
+        public static Transaction CreateDeposit(decimal value, string description)
+        {
+            return new(+value, ETransactionType.DEPOSIT, description, null);
+        }
+
+        public static Transaction CreateExpense(decimal value, string description)
+        {
+            return new(-value, ETransactionType.EXPENSE, description, null);
+        }
+
+        public static Transaction CreateReceivable(decimal value, string description, Guid? counterpartyUserId)
+        {
+            return new(+value, ETransactionType.RECEIVABLE, description, counterpartyUserId);
+        }
+
+        public static Transaction CreateTransferOut(decimal value, string description, Guid counterpartyUserId)
+        {
+            return new(-value, ETransactionType.TRANSFER_OUT, description, counterpartyUserId);
+        }
+
+        public static Transaction CreateTransferIn(decimal value, string description, Guid counterpartyUserId)
+        {
+            return new(+value, ETransactionType.TRANSFER_IN, description, counterpartyUserId);
+        }
+    }
+}
