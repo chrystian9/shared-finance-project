@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31903.59
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11619.145 insiders
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsoleUI", "ConsoleUI", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedFinanceConsoleDB.Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedFinanceConsoleDB.Domain", "src\Domain\Domain\SharedFinanceConsoleDB.Domain.csproj", "{6C9306DE-A849-1198-B74E-17714311097B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedFinanceConsoleDB.Infrastructure", "src\Infrastructure\Infrastructure\SharedFinanceConsoleDB.Infrastructure.csproj", "{0A10898E-9448-E900-A946-C208078BB2C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedFinanceConsoleDB.Database", "src\Infrastructure\Infrastructure\SharedFinanceConsoleDB.Database.csproj", "{0A10898E-9448-E900-A946-C208078BB2C5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4030CB3F-AD07-4F45-B98B-4D3073C519B1}"
 	ProjectSection(SolutionItems) = preProject

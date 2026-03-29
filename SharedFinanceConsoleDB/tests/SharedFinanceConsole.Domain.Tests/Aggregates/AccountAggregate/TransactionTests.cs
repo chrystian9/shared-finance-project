@@ -13,7 +13,7 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate
             string description = "Compra de material";
 
             // Act
-            var transaction = Transaction.CreateExpense(value, description);
+            var transaction = Transaction.CreateExpense(Guid.NewGuid(), value, description);
 
             // Assert
             Assert.Equal(-value, transaction.Value);
@@ -31,7 +31,7 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate
             Guid counterparty = Guid.NewGuid();
 
             // Act
-            var transaction = Transaction.CreateReceivable(value, description, counterparty);
+            var transaction = Transaction.CreateReceivable(Guid.NewGuid(), value, description, counterparty);
 
             // Assert
             Assert.Equal(value, transaction.Value);
@@ -49,7 +49,7 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate
             Guid counterparty = Guid.NewGuid();
 
             // Act
-            var transaction = Transaction.CreateTransferOut(value, description, counterparty);
+            var transaction = Transaction.CreateTransferOut(Guid.NewGuid(), value, description, counterparty);
 
             // Assert
             Assert.Equal(-value, transaction.Value);
@@ -67,7 +67,7 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate
             Guid counterparty = Guid.NewGuid();
 
             // Act
-            var transaction = Transaction.CreateTransferIn(value, description, counterparty);
+            var transaction = Transaction.CreateTransferIn(Guid.NewGuid(), value, description, counterparty);
 
             // Assert
             Assert.Equal(value, transaction.Value);

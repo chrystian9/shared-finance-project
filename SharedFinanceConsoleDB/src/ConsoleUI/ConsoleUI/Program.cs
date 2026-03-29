@@ -1,10 +1,14 @@
 ﻿using SharedFinanceConsoleDB.Application.Handlers.Commands;
 using SharedFinanceConsoleDB.Application.Handlers.Queries;
 using SharedFinanceConsoleDB.ConsoleUI;
+using SharedFinanceConsoleDB.Database;
 using SharedFinanceConsoleDB.Infrastructure.Repositories;
 
-var userRepository = new UserRepository();
-var accountRepository = new AccountRepository();
+using var dbContext = new SharedFinanceDBContext();
+dbContext.Database.EnsureCreated();
+
+var userRepository = new UserRepository(dbContext);
+var accountRepository = new AccountRepository(dbContext);
 
 var appController = new AppController();
 
@@ -16,3 +20,4 @@ appController.RegisterHandler(new GetUsersBalancesQueryHandler(userRepository, a
 var ui = new Menu(appController);
 
 ui.RunApp();
+

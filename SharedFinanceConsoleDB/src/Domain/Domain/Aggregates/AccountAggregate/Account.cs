@@ -25,12 +25,13 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
             if (totalValue <= 0)
                 throw new DomainException(DomainException.ExpenseTotalValueLessThanZero);
 
-            _transactions.Add(Transaction.CreateExpense(totalValue, description));
+            _transactions.Add(Transaction.CreateExpense(Id, totalValue, description));
 
             foreach (var counterparty in counterparties)
             {
                 _transactions.Add(
                     Transaction.CreateReceivable(
+                        Id,
                         counterparty.GetValue(totalValue),
                         description,
                         counterparty.AccountId)
@@ -44,8 +45,9 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
         {
             _transactions.Add(
                 Transaction.CreateTransferOut(
-                    value, 
-                    description, 
+                    Id,
+                    value,
+                    description,
                     userId)
                 );
         }
@@ -55,6 +57,7 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
         {
             _transactions.Add(
                 Transaction.CreateDeposit(
+                    Id,
                     value,
                     description)
                 );
