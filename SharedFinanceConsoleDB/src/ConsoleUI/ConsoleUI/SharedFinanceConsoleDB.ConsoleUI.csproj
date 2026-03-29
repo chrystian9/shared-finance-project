@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Application\Application\SharedFinanceConsoleDB.Application.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Infrastructure\SharedFinanceConsoleDB.Database.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Database\SharedFinanceConsoleDB.Database.csproj" />
   </ItemGroup>
 
 </Project>
