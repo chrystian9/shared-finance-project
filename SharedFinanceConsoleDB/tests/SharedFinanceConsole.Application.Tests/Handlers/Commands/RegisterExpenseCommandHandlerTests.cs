@@ -1,7 +1,6 @@
 ﻿using NSubstitute;
 using SharedFinanceConsoleDB.Application.Abstractions;
-using SharedFinanceConsoleDB.Application.Commands;
-using SharedFinanceConsoleDB.Application.Handlers.Commands;
+using SharedFinanceConsoleDB.Application.Commands.RegisterExpense;
 using SharedFinanceConsoleDB.Application.Repositories;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
@@ -22,7 +21,7 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
 
             var counterparty1 = new TransactionCounterparty(counterpartyId1, 0.5m);
             var counterparty2 = new TransactionCounterparty(counterpartyId2, 0.5m);
-            
+
             var counterparties = new List<TransactionCounterparty> { counterparty1, counterparty2 };
 
             var payerAccount = Substitute.For<Account>(Guid.NewGuid());

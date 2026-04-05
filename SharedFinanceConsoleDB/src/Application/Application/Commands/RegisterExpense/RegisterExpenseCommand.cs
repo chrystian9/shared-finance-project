@@ -1,7 +1,7 @@
 ﻿using SharedFinanceConsoleDB.Application.Abstractions;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
 
-namespace SharedFinanceConsoleDB.Application.Commands
+namespace SharedFinanceConsoleDB.Application.Commands.RegisterExpense
 {
     public record RegisterExpenseCommand : ICommand<Unit>
     {

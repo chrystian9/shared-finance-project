@@ -1,5 +1,5 @@
 ﻿using ConsoleUI.UICommands.Interfaces;
-using SharedFinanceConsoleDB.Application.Commands;
+using SharedFinanceConsoleDB.Application.Commands.RegisterExpense;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
 
 namespace SharedFinanceConsoleDB.ConsoleUI.MenuCommands

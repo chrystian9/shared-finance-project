@@ -1,5 +1,7 @@
-﻿using SharedFinanceConsoleDB.Application.Handlers.Commands;
-using SharedFinanceConsoleDB.Application.Handlers.Queries;
+﻿using SharedFinanceConsoleDB.Application.Commands.AddAccount;
+using SharedFinanceConsoleDB.Application.Commands.AddUser;
+using SharedFinanceConsoleDB.Application.Commands.RegisterExpense;
+using SharedFinanceConsoleDB.Application.Queries.GetUsersBalances;
 using SharedFinanceConsoleDB.ConsoleUI;
 using SharedFinanceConsoleDB.Database;
 using SharedFinanceConsoleDB.Infrastructure.Repositories;

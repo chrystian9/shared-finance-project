@@ -1,11 +1,10 @@
 ﻿using SharedFinanceConsoleDB.Application.Abstractions;
 using SharedFinanceConsoleDB.Application.DataContracts.Responses;
-using SharedFinanceConsoleDB.Application.Queries;
 using SharedFinanceConsoleDB.Application.Repositories;
 
-namespace SharedFinanceConsoleDB.Application.Handlers.Queries
+namespace SharedFinanceConsoleDB.Application.Queries.GetUsersBalances
 {
-    public class GetUsersBalancesQueryHandler(IUserRepository userRepository, IAccountRepository accountRepository) 
+    public class GetUsersBalancesQueryHandler(IUserRepository userRepository, IAccountRepository accountRepository)
         : IRequestHandler<GetUsersBalancesQuery, IEnumerable<UserBalanceResponse>>
     {
         public IEnumerable<UserBalanceResponse> Handle(GetUsersBalancesQuery request)

@@ -1,5 +1,5 @@
 ﻿using ConsoleUI.UICommands.Interfaces;
-using SharedFinanceConsoleDB.Application.Queries;
+using SharedFinanceConsoleDB.Application.Queries.GetUsersBalances;
 
 namespace SharedFinanceConsoleDB.ConsoleUI.MenuCommands
 {

@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
-using SharedFinanceConsoleDB.Application.Handlers.Queries;
-using SharedFinanceConsoleDB.Application.Queries;
+using SharedFinanceConsoleDB.Application.Queries.GetUsersBalances;
 using SharedFinanceConsoleDB.Application.Repositories;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
 using SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate;

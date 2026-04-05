@@ -1,8 +1,7 @@
 ﻿using SharedFinanceConsoleDB.Application.Abstractions;
-using SharedFinanceConsoleDB.Application.Commands;
 using SharedFinanceConsoleDB.Application.Repositories;
 
-namespace SharedFinanceConsoleDB.Application.Handlers.Commands
+namespace SharedFinanceConsoleDB.Application.Commands.RegisterExpense
 {
     public class RegisterExpenseCommandHandler(IAccountRepository accountRepository) : IRequestHandler<RegisterExpenseCommand, Unit>
     {

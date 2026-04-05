@@ -1,9 +1,8 @@
 ﻿using SharedFinanceConsoleDB.Application.Abstractions;
-using SharedFinanceConsoleDB.Application.Commands;
 using SharedFinanceConsoleDB.Application.Repositories;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
 
-namespace SharedFinanceConsoleDB.Application.Handlers.Commands
+namespace SharedFinanceConsoleDB.Application.Commands.AddAccount
 {
     public class AddAccountCommandHandler(IAccountRepository accountRepository) : IRequestHandler<AddAccountCommand, Guid>
     {

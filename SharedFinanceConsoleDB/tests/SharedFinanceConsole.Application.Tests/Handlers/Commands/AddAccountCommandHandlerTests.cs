@@ -1,6 +1,5 @@
 ﻿using NSubstitute;
-using SharedFinanceConsoleDB.Application.Commands;
-using SharedFinanceConsoleDB.Application.Handlers.Commands;
+using SharedFinanceConsoleDB.Application.Commands.AddAccount;
 using SharedFinanceConsoleDB.Application.Repositories;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
 

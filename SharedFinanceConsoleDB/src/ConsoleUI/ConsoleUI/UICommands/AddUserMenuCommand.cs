@@ -1,5 +1,6 @@
 ﻿using ConsoleUI.UICommands.Interfaces;
-using SharedFinanceConsoleDB.Application.Commands;
+using SharedFinanceConsoleDB.Application.Commands.AddAccount;
+using SharedFinanceConsoleDB.Application.Commands.AddUser;
 
 namespace SharedFinanceConsoleDB.ConsoleUI.MenuCommands
 {

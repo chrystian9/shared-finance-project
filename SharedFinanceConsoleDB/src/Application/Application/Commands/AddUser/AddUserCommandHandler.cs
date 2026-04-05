@@ -1,9 +1,8 @@
 ﻿using SharedFinanceConsoleDB.Application.Abstractions;
-using SharedFinanceConsoleDB.Application.Commands;
 using SharedFinanceConsoleDB.Application.Repositories;
 using SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate;
 
-namespace SharedFinanceConsoleDB.Application.Handlers.Commands
+namespace SharedFinanceConsoleDB.Application.Commands.AddUser
 {
     public class AddUserCommandHandler(IUserRepository userRepository) : IRequestHandler<AddUserCommand, Guid>
     {
