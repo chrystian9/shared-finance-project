@@ -1,4 +1,4 @@
-﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
+﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Params;
 using SharedFinanceConsoleDB.Domain.Common.DomainException;
 using SharedFinanceConsoleDB.Domain.Common.Entity;
 
@@ -6,42 +6,49 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
 {
     public class Account : Entity
     {
-        public Guid UserId { get; init; }
+        public long UserId { get; init; }
 
         private readonly List<Transaction> _transactions = [];
         public IReadOnlyCollection<Transaction> Transactions => _transactions;
 
-        public Account(Guid userId)
+        public Account(long userId)
         {
             UserId = userId;
         }
 
         public decimal GetBalance() => _transactions.Sum(t => t.Value);
 
-        public void RegisterExpense(decimal totalValue,
-            string description,
-            IEnumerable<TransactionCounterparty> counterparties)
+        public void RegisterExpense(RegisterExpenseParams @params)
         {
-            if (totalValue <= 0)
+            if (@params.TotalValue <= 0)
                 throw new DomainException(DomainException.ExpenseTotalValueLessThanZero);
 
-            _transactions.Add(Transaction.CreateExpense(Id, totalValue, description));
+            _transactions.Add(Transaction.CreateExpense(Id, @params.TotalValue, @params.Description));
 
-            foreach (var counterparty in counterparties)
+            foreach (var transactionCounterparty in @params.Counterparties)
             {
                 _transactions.Add(
                     Transaction.CreateReceivable(
                         Id,
-                        counterparty.GetValue(totalValue),
-                        description,
-                        counterparty.AccountId)
+                        transactionCounterparty.GetValue(@params.TotalValue),
+                        @params.Description,
+                        transactionCounterparty.Account.Id)
                     );
+
+                transactionCounterparty.Account.RegisterExpense(
+                    new RegisterExpenseParams
+                    {
+                        TotalValue = transactionCounterparty.GetValue(@params.TotalValue),
+                        Description = @params.Description,
+                        Counterparties = []
+                    }
+                );
             }
         }
 
         public void RegisterTransfer(decimal value,
             string description,
-            Guid userId)
+            long userId)
         {
             _transactions.Add(
                 Transaction.CreateTransferOut(

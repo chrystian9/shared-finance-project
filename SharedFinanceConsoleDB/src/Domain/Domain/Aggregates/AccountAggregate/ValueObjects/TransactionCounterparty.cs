@@ -5,15 +5,15 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects
     public class TransactionCounterparty
     {
         public decimal Percentage { get; init; }
-        public Guid AccountId { get; init; }
+        public Account Account { get; init; }
 
-        public TransactionCounterparty(Guid userId, decimal percentage)
+        public TransactionCounterparty(Account account, decimal percentage)
         {
             if (percentage <= 0 || percentage > 1)
                 throw new DomainException(DomainException.TransactionCounterpartyPercentageInvalid);
 
             Percentage = percentage;
-            AccountId = userId;
+            Account = account;
         }
 
         public decimal GetValue(decimal totalValue)
