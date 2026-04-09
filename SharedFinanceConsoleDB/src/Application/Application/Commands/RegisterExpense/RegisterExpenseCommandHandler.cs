@@ -1,5 +1,8 @@
 ﻿using SharedFinanceConsoleDB.Application.Abstractions;
+using SharedFinanceConsoleDB.Application.Exceptions;
 using SharedFinanceConsoleDB.Application.Repositories;
+using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Params;
+using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
 
 namespace SharedFinanceConsoleDB.Application.Commands.RegisterExpense
 {
@@ -7,24 +10,21 @@ namespace SharedFinanceConsoleDB.Application.Commands.RegisterExpense
     {
         public Unit Handle(RegisterExpenseCommand request)
         {
-            var payerAccount = accountRepository.GetById(request.PayerAccountId);
+            var payerAccount = accountRepository.GetByGuid(request.PayerAccountGuid)
+                ?? throw new NotFoundException(NotFoundException.AccountNotFound);
 
-            payerAccount.RegisterExpense(request.TotalValue, request.Description, request.Counterparties);
+            var counterparties = accountRepository
+                .Where((a) => request.CounterpartiesPercentageByGuid.Keys.Contains(a.Guid))
+                .Select((a) => new TransactionCounterparty(a, request.CounterpartiesPercentageByGuid[a.Guid]));
 
-            accountRepository.Save(payerAccount);
-
-            foreach (var counterparty in request.Counterparties)
+            payerAccount.RegisterExpense(new RegisterExpenseParams()
             {
-                var counterpartyAccount = accountRepository.GetById(counterparty.AccountId);
+                Counterparties = counterparties,
+                Description = request.Description,
+                TotalValue = request.TotalValue,
+            });
 
-                counterpartyAccount.RegisterTransfer(
-                    counterparty.GetValue(request.TotalValue),
-                    request.Description,
-                    counterparty.AccountId
-                );
-
-                accountRepository.Save(counterpartyAccount);
-            }
+            accountRepository.SaveChanges();
 
             return Unit.Value;
         }

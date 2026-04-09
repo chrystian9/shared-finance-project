@@ -1,4 +1,5 @@
 ﻿using SharedFinanceConsoleDB.Application.Abstractions;
+using SharedFinanceConsoleDB.Application.Exceptions;
 using SharedFinanceConsoleDB.Application.Repositories;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
 
@@ -8,11 +9,14 @@ namespace SharedFinanceConsoleDB.Application.Commands.AddAccount
     {
         public Guid Handle(AddAccountCommand request)
         {
-            var account = new Account(request.UserId);
+            var userAccount = accountRepository.GetByGuid(request.UserGuid)
+                ?? throw new NotFoundException(NotFoundException.UserNotFound);
 
-            accountRepository.Add(account);
+            var account = new Account(userAccount.Id);
 
-            return account.Id;
+            accountRepository.AddAndSaveChanges(account);
+
+            return account.Guid;
         }
     }
 }

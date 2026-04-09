@@ -2,5 +2,5 @@
 
 namespace SharedFinanceConsoleDB.Application.Commands.AddAccount
 {
-    public record AddAccountCommand(Guid UserId) : ICommand<Guid>;
+    public record AddAccountCommand(Guid UserGuid) : ICommand<Guid>;
 }

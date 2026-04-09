@@ -21,7 +21,8 @@ namespace SharedFinanceConsoleDB.Database
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}");
+            => options.UseSqlite($"Data Source={DbPath}")
+                .LogTo(Console.WriteLine);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

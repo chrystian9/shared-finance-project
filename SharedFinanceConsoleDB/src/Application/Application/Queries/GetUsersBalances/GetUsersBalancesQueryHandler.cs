@@ -22,7 +22,7 @@ namespace SharedFinanceConsoleDB.Application.Queries.GetUsersBalances
                     response.Add(new UserBalanceResponse()
                     {
                         Balance = account.GetBalance(),
-                        UserId = user.Id,
+                        UserId = user.Guid,
                         UserName = user.Name,
                     });
                 }

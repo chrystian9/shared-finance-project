@@ -1,6 +1,5 @@
 ﻿using ConsoleUI.UICommands.Interfaces;
 using SharedFinanceConsoleDB.Application.Commands.RegisterExpense;
-using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
 
 namespace SharedFinanceConsoleDB.ConsoleUI.MenuCommands
 {
@@ -45,17 +44,17 @@ namespace SharedFinanceConsoleDB.ConsoleUI.MenuCommands
 
             var loopControl = true;
 
-            var counterparties = new List<TransactionCounterparty>();
+            var counterpartiesPercentageByGuid = new Dictionary<Guid, decimal>();
 
             while (loopControl)
             {
                 Console.WriteLine("Write counterparty account ID or press ENTER:");
 
-                var counterpartyAccountIdInput = Console.ReadLine();
+                var counterpartyAccountGuidInput = Console.ReadLine();
 
-                if (string.IsNullOrEmpty(counterpartyAccountIdInput))
+                if (string.IsNullOrEmpty(counterpartyAccountGuidInput))
                     loopControl = false;
-                else if (!Guid.TryParse(counterpartyAccountIdInput, out var counterpartyAccountId))
+                else if (!Guid.TryParse(counterpartyAccountGuidInput, out var counterpartyAccountGuid))
                 {
                     Console.WriteLine("❌ Invalid ID!");
                 }
@@ -71,7 +70,7 @@ namespace SharedFinanceConsoleDB.ConsoleUI.MenuCommands
                         || percentage > 1)
                         Console.WriteLine("❌ Invalid percentage!");
                     else
-                        counterparties.Add(new TransactionCounterparty(counterpartyAccountId, percentage));
+                        counterpartiesPercentageByGuid[counterpartyAccountGuid] = percentage;
                 }
             }
 
@@ -80,12 +79,12 @@ namespace SharedFinanceConsoleDB.ConsoleUI.MenuCommands
     Total value: {totalValue},
     Description: {description}");
 
-            if (counterparties.Count > 0)
+            if (counterpartiesPercentageByGuid.Count > 0)
             {
                 Console.WriteLine("Counterparties: [");
-                foreach (var counterparty in counterparties)
+                foreach (var counterparty in counterpartiesPercentageByGuid)
                 {
-                    Console.WriteLine($"    {counterparty.AccountId}: {counterparty.Percentage * 100}%");
+                    Console.WriteLine($"    {counterparty.Key}: {counterparty.Value * 100}%");
                 }
                 Console.WriteLine("]");
             }
@@ -106,10 +105,10 @@ namespace SharedFinanceConsoleDB.ConsoleUI.MenuCommands
 
             appController.Send(new RegisterExpenseCommand()
             {
-                PayerAccountId = accountId,
+                PayerAccountGuid = accountId,
                 TotalValue = totalValue,
                 Description = description,
-                Counterparties = counterparties
+                CounterpartiesPercentageByGuid = counterpartiesPercentageByGuid
             });
 
             Console.WriteLine("Finished operation");

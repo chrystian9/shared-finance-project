@@ -10,9 +10,9 @@ namespace SharedFinanceConsoleDB.Application.Commands.AddUser
         {
             var user = new User(request.Name);
 
-            userRepository.Add(user);
+            userRepository.AddAndSaveChanges(user);
 
-            return user.Id;
+            return user.Guid;
         }
     }
 }
