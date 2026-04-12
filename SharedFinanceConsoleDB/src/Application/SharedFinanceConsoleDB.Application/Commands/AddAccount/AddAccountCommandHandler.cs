@@ -5,7 +5,7 @@ using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
 
 namespace SharedFinanceConsoleDB.Application.Commands.AddAccount
 {
-    public class AddAccountCommandHandler(IUserRepository userRepository, IAccountRepository accountRepository) : IRequestHandler<AddAccountCommand, Guid>
+    public class AddAccountCommandHandler(IUnitOfWork unitOfWork, IUserRepository userRepository, IAccountRepository accountRepository) : IRequestHandler<AddAccountCommand, Guid>
     {
         public Guid Handle(AddAccountCommand request)
         {
@@ -14,7 +14,9 @@ namespace SharedFinanceConsoleDB.Application.Commands.AddAccount
 
             var account = new Account(user.Id);
 
-            accountRepository.AddAndSaveChanges(account);
+            accountRepository.Add(account);
+
+            unitOfWork.SaveChanges();
 
             return account.Guid;
         }

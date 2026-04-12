@@ -1,4 +1,5 @@
-﻿using SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate;
+﻿using SharedFinanceConsoleDB.Application.Abstractions;
+using SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate;
 
 namespace SharedFinanceConsoleDB.Application.Repositories
 {

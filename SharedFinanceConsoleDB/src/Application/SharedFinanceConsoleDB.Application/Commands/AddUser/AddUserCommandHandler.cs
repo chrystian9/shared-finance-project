@@ -4,13 +4,15 @@ using SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate;
 
 namespace SharedFinanceConsoleDB.Application.Commands.AddUser
 {
-    public class AddUserCommandHandler(IUserRepository userRepository) : IRequestHandler<AddUserCommand, Guid>
+    public class AddUserCommandHandler(IUnitOfWork unitOfWork, IUserRepository userRepository) : IRequestHandler<AddUserCommand, Guid>
     {
         public Guid Handle(AddUserCommand request)
         {
             var user = new User(request.Name);
 
-            userRepository.AddAndSaveChanges(user);
+            userRepository.Add(user);
+
+            unitOfWork.SaveChanges();
 
             return user.Guid;
         }

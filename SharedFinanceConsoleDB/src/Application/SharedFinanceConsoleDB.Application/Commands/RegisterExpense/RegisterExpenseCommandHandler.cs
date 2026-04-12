@@ -5,7 +5,7 @@ using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
 
 namespace SharedFinanceConsoleDB.Application.Commands.RegisterExpense
 {
-    public class RegisterExpenseCommandHandler(IAccountRepository accountRepository) : IRequestHandler<RegisterExpenseCommand, Unit>
+    public class RegisterExpenseCommandHandler(IUnitOfWork unitOfWork, IAccountRepository accountRepository) : IRequestHandler<RegisterExpenseCommand, Unit>
     {
         public Unit Handle(RegisterExpenseCommand request)
         {
@@ -18,7 +18,7 @@ namespace SharedFinanceConsoleDB.Application.Commands.RegisterExpense
 
             payerAccount.RegisterExpense(request.TotalValue, request.Description, counterparties);
 
-            accountRepository.SaveChanges();
+            unitOfWork.SaveChanges();
 
             return Unit.Value;
         }

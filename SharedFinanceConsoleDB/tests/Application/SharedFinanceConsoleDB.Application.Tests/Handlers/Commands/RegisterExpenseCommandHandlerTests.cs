@@ -19,6 +19,7 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
             var totalValue = 100m;
             var description = "Test expense";
 
+            var unitOfWork = Substitute.For<IUnitOfWork>();
             var accountRepository = Substitute.For<IAccountRepository>();
             accountRepository.GetByGuid(payerAccount.Guid).Returns(payerAccount);
             accountRepository.GetByGuid(counterpartyAccount1.Guid).Returns(counterpartyAccount1);
@@ -43,7 +44,7 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
                 new TransactionCounterparty(counterpartyAccount1, counterpartiesPercentageByGuid[counterpartyAccount1.Guid])
             };
 
-            var handler = new RegisterExpenseCommandHandler(accountRepository);
+            var handler = new RegisterExpenseCommandHandler(unitOfWork, accountRepository);
 
             // Act
             var result = handler.Handle(command);
@@ -58,7 +59,7 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
                 new(counterpartyAccount2, counterpartiesPercentageByGuid[counterpartyAccount2.Guid])
             ]);
 
-            accountRepository.Received(1).SaveChanges();
+            unitOfWork.Received(1).SaveChanges();
 
             Assert.Equal(Unit.Value, result);
         }
