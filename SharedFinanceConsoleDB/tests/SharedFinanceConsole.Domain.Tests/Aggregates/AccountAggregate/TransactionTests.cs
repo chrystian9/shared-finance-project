@@ -13,13 +13,13 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate
             string description = "Compra de material";
 
             // Act
-            var transaction = Transaction.CreateExpense(Guid.NewGuid(), value, description);
+            var transaction = Transaction.CreateExpense(1, value, description);
 
             // Assert
             Assert.Equal(-value, transaction.Value);
             Assert.Equal(ETransactionType.EXPENSE, transaction.Type);
             Assert.Equal(description, transaction.Description);
-            Assert.Null(transaction.Counterparty);
+            Assert.Null(transaction.CounterpartyId);
         }
 
         [Fact]
@@ -28,16 +28,16 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate
             // Arrange
             decimal value = 200m;
             string description = "Recebimento de serviço";
-            Guid counterparty = Guid.NewGuid();
+            long counterparty = 2;
 
             // Act
-            var transaction = Transaction.CreateReceivable(Guid.NewGuid(), value, description, counterparty);
+            var transaction = Transaction.CreateReceivable(1, value, description, counterparty);
 
             // Assert
             Assert.Equal(value, transaction.Value);
             Assert.Equal(ETransactionType.RECEIVABLE, transaction.Type);
             Assert.Equal(description, transaction.Description);
-            Assert.Equal(counterparty, transaction.Counterparty);
+            Assert.Equal(counterparty, transaction.CounterpartyId);
         }
 
         [Fact]
@@ -46,16 +46,16 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate
             // Arrange
             decimal value = 50m;
             string description = "Transferência para amigo";
-            Guid counterparty = Guid.NewGuid();
+            long counterparty = 2;
 
             // Act
-            var transaction = Transaction.CreateTransferOut(Guid.NewGuid(), value, description, counterparty);
+            var transaction = Transaction.CreateTransferOut(1, value, description, counterparty);
 
             // Assert
             Assert.Equal(-value, transaction.Value);
             Assert.Equal(ETransactionType.TRANSFER_OUT, transaction.Type);
             Assert.Equal(description, transaction.Description);
-            Assert.Equal(counterparty, transaction.Counterparty);
+            Assert.Equal(counterparty, transaction.CounterpartyId);
         }
 
         [Fact]
@@ -64,16 +64,16 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate
             // Arrange
             decimal value = 75m;
             string description = "Transferência recebida";
-            Guid counterparty = Guid.NewGuid();
+            long counterparty = 2;
 
             // Act
-            var transaction = Transaction.CreateTransferIn(Guid.NewGuid(), value, description, counterparty);
+            var transaction = Transaction.CreateTransferIn(1, value, description, counterparty);
 
             // Assert
             Assert.Equal(value, transaction.Value);
             Assert.Equal(ETransactionType.TRANSFER_IN, transaction.Type);
             Assert.Equal(description, transaction.Description);
-            Assert.Equal(counterparty, transaction.Counterparty);
+            Assert.Equal(counterparty, transaction.CounterpartyId);
         }
     }
 }

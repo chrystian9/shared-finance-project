@@ -37,8 +37,8 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Queries
             var responses = result.ToList();
             Assert.Equal(2, responses.Count);
 
-            Assert.Contains(responses, r => r.UserId == user1.Id && r.UserName == user1.Name && r.Balance == 100m);
-            Assert.Contains(responses, r => r.UserId == user2.Id && r.UserName == user2.Name && r.Balance == 200m);
+            Assert.Contains(responses, r => r.UserId == user1.Guid && r.UserName == user1.Name && r.Balance == 100m);
+            Assert.Contains(responses, r => r.UserId == user2.Guid && r.UserName == user2.Name && r.Balance == 200m);
         }
 
         [Fact]

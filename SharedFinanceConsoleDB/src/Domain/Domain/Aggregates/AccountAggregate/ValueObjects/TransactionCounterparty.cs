@@ -24,5 +24,14 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects
                 MidpointRounding.AwayFromZero
             );
         }
+
+        public void RegisterExpense(decimal totalValue, string description)
+        {
+            Account.RegisterExpense(
+                GetValue(totalValue),
+                description,
+                []
+            );
+        }
     }
 }

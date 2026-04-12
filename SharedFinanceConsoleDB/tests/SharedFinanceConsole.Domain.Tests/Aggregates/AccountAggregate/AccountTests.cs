@@ -11,22 +11,23 @@ public class AccountTests
     public void Constructor_SetsUserId()
     {
         // Arrange
-        var userId = Guid.NewGuid();
+        var userId = 1;
 
         // Act
         var account = new Account(userId);
 
         // Assert
         Assert.Equal(userId, account.UserId);
+        Assert.Empty(account.Transactions);
     }
 
     [Fact]
     public void GetBalance_ReturnsSumOfTransactions()
     {
         // Arrange
-        var account = new Account(Guid.NewGuid());
+        var account = new Account(1);
         account.RegisterExpense(100m, "Expense", []);
-        account.RegisterTransfer(50m, "Transfer", Guid.NewGuid());
+        account.RegisterTransfer(50m, "Transfer", 2);
 
         // Act
         var expectedBalance = account.Transactions.Sum(t => t.Value);
@@ -40,7 +41,7 @@ public class AccountTests
     public void RegisterExpense_AddsExpenseTransaction()
     {
         // Arrange
-        var account = new Account(Guid.NewGuid());
+        var account = new Account(1);
 
         // Act
         account.RegisterExpense(100m, "Expense", []);
@@ -54,11 +55,11 @@ public class AccountTests
     public void RegisterExpense_AddsReceivableTransactionsForCounterparties()
     {
         // Arrange
-        var account = new Account(Guid.NewGuid());
+        var account = new Account(1);
         var counterparties = new[]
         {
-            new TransactionCounterparty(Guid.NewGuid(), 0.5m),
-            new TransactionCounterparty(Guid.NewGuid(), 0.5m)
+            new TransactionCounterparty(new Account(2), 0.5m),
+            new TransactionCounterparty(new Account(3), 0.5m)
         };
 
         // Act
@@ -73,21 +74,19 @@ public class AccountTests
     public void RegisterExpense_ThrowsWhenTotalValueIsZeroOrNegative()
     {
         // Arrange
-        var account = new Account(Guid.NewGuid());
+        var account = new Account(1);
 
         // Act & Assert
-        Assert.Throws<DomainException>(() =>
-            account.RegisterExpense(0m, "Expense", Enumerable.Empty<TransactionCounterparty>()));
-        Assert.Throws<DomainException>(() =>
-            account.RegisterExpense(-10m, "Expense", Enumerable.Empty<TransactionCounterparty>()));
+        Assert.Throws<DomainException>(() => account.RegisterExpense(0m, "Expense", []));
+        Assert.Throws<DomainException>(() => account.RegisterExpense(-10m, "Expense", []));
     }
 
     [Fact]
     public void RegisterTransfer_AddsTransferOutTransaction()
     {
         // Arrange
-        var account = new Account(Guid.NewGuid());
-        var counterpartyId = Guid.NewGuid();
+        var account = new Account(1);
+        var counterpartyId = 2;
 
         // Act
         account.RegisterTransfer(50m, "Transfer", counterpartyId);
@@ -97,6 +96,6 @@ public class AccountTests
         var transaction = account.Transactions.First();
         Assert.Equal(ETransactionType.TRANSFER_OUT, transaction.Type);
         Assert.Equal(-50m, transaction.Value);
-        Assert.Equal(counterpartyId, transaction.Counterparty);
+        Assert.Equal(counterpartyId, transaction.CounterpartyId);
     }
 }

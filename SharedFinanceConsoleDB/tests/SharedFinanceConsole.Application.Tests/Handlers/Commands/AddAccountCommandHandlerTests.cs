@@ -2,6 +2,7 @@
 using SharedFinanceConsoleDB.Application.Commands.AddAccount;
 using SharedFinanceConsoleDB.Application.Repositories;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
+using SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate;
 
 namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
 {
@@ -11,24 +12,21 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
         public void Handle_ShouldAddAccountAndReturnId()
         {
             // Arrange
-            var userId = Guid.NewGuid();
-            var command = new AddAccountCommand(userId);
-            var mockRepo = Substitute.For<IAccountRepository>();
-            Account? addedAccount = null;
-            mockRepo
-                .When(r => r.Add(Arg.Any<Account>()))
-                .Do(callInfo => addedAccount = callInfo.Arg<Account>());
+            var user = new User("Test User");
+            var command = new AddAccountCommand(user.Guid);
+            var mockUserRepo = Substitute.For<IUserRepository>();
+            var mockAccountRepo = Substitute.For<IAccountRepository>();
 
-            var handler = new AddAccountCommandHandler(mockRepo);
+            mockUserRepo.GetByGuid(user.Guid).Returns(user);
+
+            var handler = new AddAccountCommandHandler(mockUserRepo, mockAccountRepo);
 
             // Act
             var result = handler.Handle(command);
 
             // Assert
-            Assert.NotNull(addedAccount);
-            Assert.Equal(userId, addedAccount.UserId);
-            Assert.Equal(addedAccount.Id, result);
-            mockRepo.Received(1).Add(Arg.Any<Account>());
+            mockAccountRepo.Received(1).Add(Arg.Is<Account>(a => a.UserId == 1));
+            Assert.NotEqual(Guid.Empty, result);
         }
     }
 }

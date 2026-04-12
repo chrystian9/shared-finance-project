@@ -7,6 +7,8 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate
     {
         public string Name { get; init; }
 
+        public User() { }
+
         public User(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

@@ -12,6 +12,8 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
         public long? CounterpartyId { get; init; }
         public long AccountId { get; init; }
 
+        public Transaction() { }
+
         public Transaction(long accountId,
             decimal value,
             ETransactionType type,

@@ -10,35 +10,37 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
     public class RegisterExpenseCommandHandlerTests
     {
         [Fact]
-        public void Handle_ShouldRegisterExpenseAndTransfers()
+        public void Handle_Should_ReturnUnitValue_WhenRegisterExpenseAndTransfers()
         {
             // Arrange
-            var payerAccountId = Guid.NewGuid();
-            var counterpartyId1 = Guid.NewGuid();
-            var counterpartyId2 = Guid.NewGuid();
+            var payerAccount = new Account(1);
+            var counterpartyAccount1 = new Account(2);
+            var counterpartyAccount2 = new Account(3);
             var totalValue = 100m;
             var description = "Test expense";
 
-            var counterparty1 = new TransactionCounterparty(counterpartyId1, 0.5m);
-            var counterparty2 = new TransactionCounterparty(counterpartyId2, 0.5m);
-
-            var counterparties = new List<TransactionCounterparty> { counterparty1, counterparty2 };
-
-            var payerAccount = Substitute.For<Account>(Guid.NewGuid());
-            var counterpartyAccount1 = Substitute.For<Account>(Guid.NewGuid());
-            var counterpartyAccount2 = Substitute.For<Account>(Guid.NewGuid());
-
             var accountRepository = Substitute.For<IAccountRepository>();
-            accountRepository.GetById(payerAccountId).Returns(payerAccount);
-            accountRepository.GetById(counterpartyId1).Returns(counterpartyAccount1);
-            accountRepository.GetById(counterpartyId2).Returns(counterpartyAccount2);
+            accountRepository.GetByGuid(payerAccount.Guid).Returns(payerAccount);
+            accountRepository.GetByGuid(counterpartyAccount1.Guid).Returns(counterpartyAccount1);
+            accountRepository.GetByGuid(counterpartyAccount2.Guid).Returns(counterpartyAccount2);
+
+            var counterpartiesPercentageByGuid = new Dictionary<Guid, decimal>
+            {
+                { counterpartyAccount1.Guid, 0.5m },
+                { counterpartyAccount2.Guid, 0.5m }
+            };
 
             var command = new RegisterExpenseCommand
             {
-                PayerAccountId = payerAccountId,
+                PayerAccountGuid = payerAccount.Guid,
                 TotalValue = totalValue,
                 Description = description,
-                Counterparties = counterparties
+                CounterpartiesPercentageByGuid = counterpartiesPercentageByGuid
+            };
+
+            var counterparties = new[] {
+                new TransactionCounterparty(counterpartyAccount1, counterpartiesPercentageByGuid[counterpartyAccount1.Guid]),
+                new TransactionCounterparty(counterpartyAccount1, counterpartiesPercentageByGuid[counterpartyAccount1.Guid])
             };
 
             var handler = new RegisterExpenseCommandHandler(accountRepository);
@@ -47,13 +49,16 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
             var result = handler.Handle(command);
 
             // Assert
-            payerAccount.Received(1).RegisterExpense(totalValue, description, counterparties);
-            accountRepository.Received(1).Save(payerAccount);
+            accountRepository.Received(1).GetByGuid(payerAccount.Guid);
+            accountRepository.Received(1).Where((a) => counterpartiesPercentageByGuid.Keys.Contains(a.Guid));
 
-            counterpartyAccount1.Received(1).RegisterTransfer(50m, description, counterpartyId1);
-            counterpartyAccount2.Received(1).RegisterTransfer(50m, description, counterpartyId2);
-            accountRepository.Received(1).Save(counterpartyAccount1);
-            accountRepository.Received(1).Save(counterpartyAccount2);
+            payerAccount.Received(1).RegisterExpense(totalValue, description,
+            [
+                new(counterpartyAccount1, counterpartiesPercentageByGuid[counterpartyAccount1.Guid]),
+                new(counterpartyAccount2, counterpartiesPercentageByGuid[counterpartyAccount2.Guid])
+            ]);
+
+            accountRepository.Received(1).SaveChanges();
 
             Assert.Equal(Unit.Value, result);
         }

@@ -1,4 +1,5 @@
-﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
+﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
+using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
 using SharedFinanceConsoleDB.Domain.Common.DomainException;
 
 namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate.ValueObjects
@@ -9,14 +10,14 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate.ValueO
         public void Constructor_ValidPercentage_ShouldSetProperties()
         {
             // Arrange
-            var accountId = Guid.NewGuid();
+            var account = new Account(1);
             decimal percentage = 0.5m;
 
             // Act
-            var counterparty = new TransactionCounterparty(accountId, percentage);
+            var counterparty = new TransactionCounterparty(account, percentage);
 
             // Assert
-            Assert.Equal(accountId, counterparty.AccountId);
+            Assert.Equal(account, counterparty.Account);
             Assert.Equal(percentage, counterparty.Percentage);
         }
 
@@ -26,11 +27,8 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate.ValueO
         [InlineData(1.1)]
         public void Constructor_InvalidPercentage_ShouldThrowDomainException(decimal invalidPercentage)
         {
-            // Arrange
-            var accountId = Guid.NewGuid();
-
-            // Act & Assert
-            var ex = Assert.Throws<DomainException>(() => new TransactionCounterparty(accountId, invalidPercentage));
+            // Arrange & Act & Assert
+            var ex = Assert.Throws<DomainException>(() => new TransactionCounterparty(new Account(1), invalidPercentage));
             Assert.Equal(DomainException.TransactionCounterpartyPercentageInvalid, ex.Message);
         }
 
@@ -42,8 +40,7 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate.ValueO
         public void GetValue_ShouldReturnRoundedValue(decimal totalValue, decimal percentage, decimal expected)
         {
             // Arrange
-            var accountId = Guid.NewGuid();
-            var counterparty = new TransactionCounterparty(accountId, percentage);
+            var counterparty = new TransactionCounterparty(new Account(1), percentage);
 
             // Act
             var value = counterparty.GetValue(totalValue);

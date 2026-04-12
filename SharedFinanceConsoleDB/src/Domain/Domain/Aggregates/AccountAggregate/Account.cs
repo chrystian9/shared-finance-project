@@ -1,4 +1,4 @@
-﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Params;
+﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
 using SharedFinanceConsoleDB.Domain.Common.DomainException;
 using SharedFinanceConsoleDB.Domain.Common.Entity;
 
@@ -11,6 +11,8 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
         private readonly List<Transaction> _transactions = [];
         public IReadOnlyCollection<Transaction> Transactions => _transactions;
 
+        public Account() { }
+
         public Account(long userId)
         {
             UserId = userId;
@@ -18,31 +20,26 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
 
         public decimal GetBalance() => _transactions.Sum(t => t.Value);
 
-        public void RegisterExpense(RegisterExpenseParams @params)
+        public void RegisterExpense(decimal totalValue,
+            string description,
+            IEnumerable<TransactionCounterparty> counterparties)
         {
-            if (@params.TotalValue <= 0)
+            if (totalValue <= 0)
                 throw new DomainException(DomainException.ExpenseTotalValueLessThanZero);
 
-            _transactions.Add(Transaction.CreateExpense(Id, @params.TotalValue, @params.Description));
+            _transactions.Add(Transaction.CreateExpense(Id, totalValue, description));
 
-            foreach (var transactionCounterparty in @params.Counterparties)
+            foreach (var transactionCounterparty in counterparties)
             {
                 _transactions.Add(
                     Transaction.CreateReceivable(
                         Id,
-                        transactionCounterparty.GetValue(@params.TotalValue),
-                        @params.Description,
+                        transactionCounterparty.GetValue(totalValue),
+                        description,
                         transactionCounterparty.Account.Id)
                     );
 
-                transactionCounterparty.Account.RegisterExpense(
-                    new RegisterExpenseParams
-                    {
-                        TotalValue = transactionCounterparty.GetValue(@params.TotalValue),
-                        Description = @params.Description,
-                        Counterparties = []
-                    }
-                );
+                transactionCounterparty.RegisterExpense(totalValue, description);
             }
         }
 

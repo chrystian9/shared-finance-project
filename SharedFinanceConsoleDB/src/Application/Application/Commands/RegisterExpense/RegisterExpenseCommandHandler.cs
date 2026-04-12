@@ -1,7 +1,6 @@
 ﻿using SharedFinanceConsoleDB.Application.Abstractions;
 using SharedFinanceConsoleDB.Application.Exceptions;
 using SharedFinanceConsoleDB.Application.Repositories;
-using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Params;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
 
 namespace SharedFinanceConsoleDB.Application.Commands.RegisterExpense
@@ -17,12 +16,7 @@ namespace SharedFinanceConsoleDB.Application.Commands.RegisterExpense
                 .Where((a) => request.CounterpartiesPercentageByGuid.Keys.Contains(a.Guid))
                 .Select((a) => new TransactionCounterparty(a, request.CounterpartiesPercentageByGuid[a.Guid]));
 
-            payerAccount.RegisterExpense(new RegisterExpenseParams()
-            {
-                Counterparties = counterparties,
-                Description = request.Description,
-                TotalValue = request.TotalValue,
-            });
+            payerAccount.RegisterExpense(request.TotalValue, request.Description, counterparties);
 
             accountRepository.SaveChanges();
 

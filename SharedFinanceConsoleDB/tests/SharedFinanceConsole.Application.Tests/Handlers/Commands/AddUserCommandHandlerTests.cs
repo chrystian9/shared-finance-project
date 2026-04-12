@@ -19,7 +19,7 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
             var result = handler.Handle(command);
 
             // Assert
-            userRepository.Received(1).Add(Arg.Is<User>(u => u.Name == "Test User" && u.Id == result));
+            userRepository.Received(1).Add(Arg.Is<User>(u => u.Name == "Test User" && u.Guid == result));
             Assert.NotEqual(Guid.Empty, result);
         }
     }

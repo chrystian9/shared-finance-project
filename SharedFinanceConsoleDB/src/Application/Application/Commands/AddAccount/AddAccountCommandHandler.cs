@@ -5,14 +5,14 @@ using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
 
 namespace SharedFinanceConsoleDB.Application.Commands.AddAccount
 {
-    public class AddAccountCommandHandler(IAccountRepository accountRepository) : IRequestHandler<AddAccountCommand, Guid>
+    public class AddAccountCommandHandler(IUserRepository userRepository, IAccountRepository accountRepository) : IRequestHandler<AddAccountCommand, Guid>
     {
         public Guid Handle(AddAccountCommand request)
         {
-            var userAccount = accountRepository.GetByGuid(request.UserGuid)
+            var user = userRepository.GetByGuid(request.UserGuid)
                 ?? throw new NotFoundException(NotFoundException.UserNotFound);
 
-            var account = new Account(userAccount.Id);
+            var account = new Account(user.Id);
 
             accountRepository.AddAndSaveChanges(account);
 

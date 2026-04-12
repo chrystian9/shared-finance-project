@@ -15,7 +15,7 @@ var accountRepository = new AccountRepository(dbContext);
 var appController = new AppController();
 
 appController.RegisterHandler(new AddUserCommandHandler(userRepository));
-appController.RegisterHandler(new AddAccountCommandHandler(accountRepository));
+appController.RegisterHandler(new AddAccountCommandHandler(userRepository, accountRepository));
 appController.RegisterHandler(new RegisterExpenseCommandHandler(accountRepository));
 appController.RegisterHandler(new GetUsersBalancesQueryHandler(userRepository, accountRepository));
 
