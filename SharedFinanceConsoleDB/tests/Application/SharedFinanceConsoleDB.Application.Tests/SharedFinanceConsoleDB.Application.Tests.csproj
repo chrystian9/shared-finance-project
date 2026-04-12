@@ -13,6 +13,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
+    <PackageReference Include="NSubstitute" Version="5.3.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
@@ -21,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Domain\Domain\SharedFinanceConsoleDB.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Application\SharedFinanceConsoleDB.Application\SharedFinanceConsoleDB.Application.csproj" />
+    <ProjectReference Include="..\..\..\src\Domain\SharedFinanceConsoleDB.Domain\SharedFinanceConsoleDB.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

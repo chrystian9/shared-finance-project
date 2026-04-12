@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\Domain\SharedFinanceConsoleDB.Domain.csproj" />
+    <ProjectReference Include="..\..\Domain\SharedFinanceConsoleDB.Domain\SharedFinanceConsoleDB.Domain.csproj" />
   </ItemGroup>
 
 </Project>
