@@ -167,7 +167,7 @@ dotnet test
 - [x] CQRS light
 - [x] Mediator pattern
 - [x] Domain unit tests
-- [ ] Database persistence (EF Core / SQLite)
+- [x] Database persistence (EF Core / SQLite)
 - [ ] Desktop UI (WPF or WinUI)
 - [ ] REST API (ASP.NET Web API)
 - [ ] Authentication (JWT)
