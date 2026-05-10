@@ -11,8 +11,8 @@ using SharedFinanceConsoleDB.Database;
 namespace SharedFinanceConsoleDB.Database.Migrations
 {
     [DbContext(typeof(SharedFinanceDBContext))]
-    [Migration("20260329195325_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260510211811_InitialDatabase")]
+    partial class InitialDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,12 +22,15 @@ namespace SharedFinanceConsoleDB.Database.Migrations
 
             modelBuilder.Entity("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Account", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("Guid")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
+                    b.Property<long>("UserId")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -38,21 +41,21 @@ namespace SharedFinanceConsoleDB.Database.Migrations
 
             modelBuilder.Entity("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Transaction", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("AccountId")
-                        .HasColumnType("TEXT");
+                    b.Property<long>("AccountId")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("AccountId1")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("Counterparty")
-                        .HasColumnType("TEXT");
+                    b.Property<long?>("CounterpartyId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("Guid")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Type")
@@ -65,15 +68,18 @@ namespace SharedFinanceConsoleDB.Database.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("AccountId1");
+                    b.HasIndex("CounterpartyId");
 
                     b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("Guid")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -87,28 +93,36 @@ namespace SharedFinanceConsoleDB.Database.Migrations
 
             modelBuilder.Entity("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Account", b =>
                 {
-                    b.HasOne("SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate.User", null)
+                    b.HasOne("SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Transaction", b =>
                 {
-                    b.HasOne("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Account", null)
-                        .WithMany()
+                    b.HasOne("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Account", "Account")
+                        .WithMany("Transactions")
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Account", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("AccountId1");
+                    b.HasOne("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Account", "Counterparty")
+                        .WithMany("CounterpartyTransactions")
+                        .HasForeignKey("CounterpartyId");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Counterparty");
                 });
 
             modelBuilder.Entity("SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Account", b =>
                 {
+                    b.Navigation("CounterpartyTransactions");
+
                     b.Navigation("Transactions");
                 });
 #pragma warning restore 612, 618

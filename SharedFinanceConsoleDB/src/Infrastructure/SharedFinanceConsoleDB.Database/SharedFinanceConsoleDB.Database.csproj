@@ -19,9 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Application\Application\SharedFinanceConsoleDB.Application.csproj" />
     <ProjectReference Include="..\..\Application\SharedFinanceConsoleDB.Application\SharedFinanceConsoleDB.Application.csproj" />
-    <ProjectReference Include="..\..\Domain\Domain\SharedFinanceConsoleDB.Domain.csproj" />
     <ProjectReference Include="..\..\Domain\SharedFinanceConsoleDB.Domain\SharedFinanceConsoleDB.Domain.csproj" />
   </ItemGroup>
 

@@ -13,11 +13,15 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
         private readonly List<Transaction> _transactions = [];
         public IReadOnlyCollection<Transaction> Transactions => _transactions;
 
+        private readonly List<Transaction> _counterpartyTransactions = [];
+        public IReadOnlyCollection<Transaction> CounterpartyTransactions => _counterpartyTransactions;
+
         public Account() { }
 
         public Account(User user)
         {
-            User = user;
+            User = user
+                ?? throw new DomainException(DomainException.UserIsRequired);
         }
 
         public decimal GetBalance() => _transactions.Sum(t => t.Value);

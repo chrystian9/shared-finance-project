@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SharedFinanceConsoleDB.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,10 @@ namespace SharedFinanceConsoleDB.Database.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Guid = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -27,8 +29,10 @@ namespace SharedFinanceConsoleDB.Database.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
+                    Guid = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,13 +49,14 @@ namespace SharedFinanceConsoleDB.Database.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<long>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Value = table.Column<decimal>(type: "TEXT", nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    Counterparty = table.Column<Guid>(type: "TEXT", nullable: true),
-                    AccountId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    AccountId1 = table.Column<Guid>(type: "TEXT", nullable: true)
+                    AccountId = table.Column<long>(type: "INTEGER", nullable: false),
+                    CounterpartyId = table.Column<long>(type: "INTEGER", nullable: true),
+                    Guid = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,8 +68,8 @@ namespace SharedFinanceConsoleDB.Database.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transactions_Accounts_AccountId1",
-                        column: x => x.AccountId1,
+                        name: "FK_Transactions_Accounts_CounterpartyId",
+                        column: x => x.CounterpartyId,
                         principalTable: "Accounts",
                         principalColumn: "Id");
                 });
@@ -80,9 +85,9 @@ namespace SharedFinanceConsoleDB.Database.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_AccountId1",
+                name: "IX_Transactions_CounterpartyId",
                 table: "Transactions",
-                column: "AccountId1");
+                column: "CounterpartyId");
         }
 
         /// <inheritdoc />

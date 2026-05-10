@@ -1,4 +1,5 @@
 ﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.Enum;
+using SharedFinanceConsoleDB.Domain.Common.DomainException;
 using SharedFinanceConsoleDB.Domain.Common.Entity;
 
 namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
@@ -9,11 +10,11 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
         public ETransactionType Type { get; init; }
         public string Description { get; init; }
 
-        public long? CounterpartyId { get; init; }
-        public virtual Account? Counterparty { get; init; }
-
         public long AccountId { get; init; }
         public virtual Account Account { get; init; }
+
+        public long? CounterpartyId { get; init; }
+        public virtual Account? Counterparty { get; init; }
 
         public Transaction() { }
 
@@ -23,11 +24,13 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
             Account account,
             Account? counterparty)
         {
+            Account = account
+                ?? throw new DomainException(DomainException.AccountIsRequired);
+
             Value = value;
             Type = type;
             Description = description;
             Counterparty = counterparty;
-            Account = account;
         }
 
         public static Transaction CreateDeposit(decimal value, string description, Account account)

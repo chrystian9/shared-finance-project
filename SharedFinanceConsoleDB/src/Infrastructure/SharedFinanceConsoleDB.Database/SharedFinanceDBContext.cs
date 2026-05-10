@@ -11,17 +11,10 @@ namespace SharedFinanceConsoleDB.Database
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public string DbPath { get; }
-
-        public SharedFinanceDBContext()
-        {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = System.IO.Path.Join(path, "blogging.db");
-        }
+        public SharedFinanceDBContext() { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}")
+            => options.UseSqlite($"Data Source=shared_finance.db")
                 .LogTo(Console.WriteLine);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

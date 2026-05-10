@@ -7,6 +7,10 @@
 
         // Account
         public static string ExpenseTotalValueLessThanZero = "Expense must be positive";
+        public static string UserIsRequired = "User is required in Account";
+
+        // Transaction
+        public static string AccountIsRequired = "Account is required in Transaction";
 
         // TransactionCounterparty
         public static string TransactionCounterpartyPercentageInvalid = "Percentage is invalid in TransactionCounterparty";
