@@ -1,5 +1,6 @@
 ﻿using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate;
 using SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate.ValueObjects;
+using SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate;
 using SharedFinanceConsoleDB.Domain.Common.DomainException;
 
 namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate.ValueObjects
@@ -10,7 +11,8 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate.ValueO
         public void Constructor_ValidPercentage_ShouldSetProperties()
         {
             // Arrange
-            var account = new Account(1);
+            var user = new User();
+            var account = new Account(user);
             decimal percentage = 0.5m;
 
             // Act
@@ -28,7 +30,7 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate.ValueO
         public void Constructor_InvalidPercentage_ShouldThrowDomainException(decimal invalidPercentage)
         {
             // Arrange & Act & Assert
-            var ex = Assert.Throws<DomainException>(() => new TransactionCounterparty(new Account(1), invalidPercentage));
+            var ex = Assert.Throws<DomainException>(() => new TransactionCounterparty(new(new()), invalidPercentage));
             Assert.Equal(DomainException.TransactionCounterpartyPercentageInvalid, ex.Message);
         }
 
@@ -40,7 +42,7 @@ namespace SharedFinanceConsoleDB.Domain.Tests.Aggregates.AccountAggregate.ValueO
         public void GetValue_ShouldReturnRoundedValue(decimal totalValue, decimal percentage, decimal expected)
         {
             // Arrange
-            var counterparty = new TransactionCounterparty(new Account(1), percentage);
+            var counterparty = new TransactionCounterparty(new(new()), percentage);
 
             // Act
             var value = counterparty.GetValue(totalValue);

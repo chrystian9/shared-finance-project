@@ -27,7 +27,7 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Commands
             var result = handler.Handle(command);
 
             // Assert
-            mockAccountRepo.Received(1).Add(Arg.Is<Account>(a => a.UserId == 1));
+            mockAccountRepo.Received(1).Add(Arg.Is<Account>(a => a.User.Guid == user.Guid));
             unitOfWork.Received(1).SaveChanges();
 
             Assert.NotEqual(Guid.Empty, result);

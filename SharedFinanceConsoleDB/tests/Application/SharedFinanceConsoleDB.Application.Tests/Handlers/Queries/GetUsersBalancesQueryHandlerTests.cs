@@ -20,10 +20,10 @@ namespace SharedFinanceConsoleDB.Application.Tests.Handlers.Queries
 
             userRepository.GetAll().Returns([user1, user2]);
 
-            var account1 = new Account(user1.Id);
+            var account1 = new Account(user1);
             account1.RegisterDeposit(100, "Deposit");
 
-            var account2 = new Account(user2.Id);
+            var account2 = new Account(user2);
             account2.RegisterDeposit(200, "Deposit");
 
             accountRepository.GetAll().Returns([account1, account2]);
