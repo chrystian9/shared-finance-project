@@ -10,46 +10,49 @@ namespace SharedFinanceConsoleDB.Domain.Aggregates.AccountAggregate
         public string Description { get; init; }
 
         public long? CounterpartyId { get; init; }
+        public virtual Account? Counterparty { get; init; }
+
         public long AccountId { get; init; }
+        public virtual Account Account { get; init; }
 
         public Transaction() { }
 
-        public Transaction(long accountId,
-            decimal value,
+        public Transaction(decimal value,
             ETransactionType type,
             string description,
-            long? counterpartyId)
+            Account account,
+            Account? counterparty)
         {
             Value = value;
             Type = type;
             Description = description;
-            CounterpartyId = counterpartyId;
-            AccountId = accountId;
+            Counterparty = counterparty;
+            Account = account;
         }
 
-        public static Transaction CreateDeposit(long accountId, decimal value, string description)
+        public static Transaction CreateDeposit(decimal value, string description, Account account)
         {
-            return new(accountId, +value, ETransactionType.DEPOSIT, description, null);
+            return new(+value, ETransactionType.DEPOSIT, description, account, null);
         }
 
-        public static Transaction CreateExpense(long accountId, decimal value, string description)
+        public static Transaction CreateExpense(decimal value, string description, Account account)
         {
-            return new(accountId, -value, ETransactionType.EXPENSE, description, null);
+            return new(-value, ETransactionType.EXPENSE, description, account, null);
         }
 
-        public static Transaction CreateReceivable(long accountId, decimal value, string description, long? counterpartAccountId)
+        public static Transaction CreateReceivable(decimal value, string description, Account account, Account? counterpartAccount)
         {
-            return new(accountId, +value, ETransactionType.RECEIVABLE, description, counterpartAccountId);
+            return new(+value, ETransactionType.RECEIVABLE, description, account, counterpartAccount);
         }
 
-        public static Transaction CreateTransferOut(long accountId, decimal value, string description, long counterpartAccountId)
+        public static Transaction CreateTransferOut(decimal value, string description, Account account, Account counterpartAccount)
         {
-            return new(accountId, -value, ETransactionType.TRANSFER_OUT, description, counterpartAccountId);
+            return new(-value, ETransactionType.TRANSFER_OUT, description, account, counterpartAccount);
         }
 
-        public static Transaction CreateTransferIn(long accountId, decimal value, string description, long counterpartAccountId)
+        public static Transaction CreateTransferIn(decimal value, string description, Account account, Account counterpartAccount)
         {
-            return new(accountId, +value, ETransactionType.TRANSFER_IN, description, counterpartAccountId);
+            return new(+value, ETransactionType.TRANSFER_IN, description, account, counterpartAccount);
         }
     }
 }

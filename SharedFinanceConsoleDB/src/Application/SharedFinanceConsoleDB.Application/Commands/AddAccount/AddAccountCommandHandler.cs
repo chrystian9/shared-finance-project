@@ -12,7 +12,7 @@ namespace SharedFinanceConsoleDB.Application.Commands.AddAccount
             var user = userRepository.GetByGuid(request.UserGuid)
                 ?? throw new NotFoundException(NotFoundException.UserNotFound);
 
-            var account = new Account(user.Id);
+            var account = new Account(user);
 
             accountRepository.Add(account);
 

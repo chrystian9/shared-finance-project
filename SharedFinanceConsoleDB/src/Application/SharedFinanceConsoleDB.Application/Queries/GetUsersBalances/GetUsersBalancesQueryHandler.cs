@@ -11,13 +11,13 @@ namespace SharedFinanceConsoleDB.Application.Queries.GetUsersBalances
         {
             var users = userRepository.GetAll();
             var accountsByUserId = accountRepository.GetAll()
-                .ToDictionary(a => a.UserId, a => a);
+                .ToDictionary(a => a.User.Guid, a => a);
 
             var response = new List<UserBalanceResponse>();
 
             foreach (var user in users)
             {
-                if (accountsByUserId.TryGetValue(user.Id, out var account))
+                if (accountsByUserId.TryGetValue(user.Guid, out var account))
                 {
                     response.Add(new UserBalanceResponse()
                     {
