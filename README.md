@@ -83,6 +83,42 @@ The balance is never stored directly — it is always derived from transactions.
 
 ---
 
+## 🗄️ Database Schema
+
+The database uses SQLite with Entity Framework Core and consists of three main entities:
+
+### Users
+| Column | Description |
+|--------|-------------|
+| Id | Unique identifier |
+| Name | User's name |
+| Guid | Unique GUID |
+
+### Accounts
+| Column | Description |
+|--------|-------------|
+| Id | Unique identifier |
+| UserId | Reference to user |
+| Guid | Unique GUID |
+
+### Transactions
+| Column | Description |
+|--------|-------------|
+| Id | Unique identifier |
+| Value | Transaction amount |
+| Type | Transaction type |
+| Description | Transaction description |
+| AccountId | Reference to account |
+| CounterpartyId | Reference to counterparty account (optional) |
+| Guid | Unique GUID |
+
+**Relationships:**
+- User → Accounts (1:N)
+- Account → Transactions (1:N)
+- Transaction → Account (Counterparty) (N:1, optional)
+
+---
+
 ## 🧪 Testing
 
 Tests focus on:
