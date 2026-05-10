@@ -10,25 +10,19 @@ namespace SharedFinanceConsoleDB.Application.Queries.GetUsersBalances
         public IEnumerable<UserBalanceResponse> Handle(GetUsersBalancesQuery request)
         {
             var users = userRepository.GetAll();
-            var accountsByUserId = accountRepository.GetAll()
-                .ToDictionary(a => a.User.Guid, a => a);
+            var accounts = accountRepository.GetAll();
 
-            var response = new List<UserBalanceResponse>();
-
-            foreach (var user in users)
-            {
-                if (accountsByUserId.TryGetValue(user.Guid, out var account))
-                {
-                    response.Add(new UserBalanceResponse()
+            return users
+                .Join(accounts,
+                    u => u.Guid,
+                    a => a.User.Guid,
+                    (user, account) => new UserBalanceResponse()
                     {
                         Balance = account.GetBalance(),
                         UserId = user.Guid,
                         UserName = user.Name,
-                    });
-                }
-            }
-
-            return response;
+                    })
+                .OrderBy(r => r.UserName);
         }
     }
 }
