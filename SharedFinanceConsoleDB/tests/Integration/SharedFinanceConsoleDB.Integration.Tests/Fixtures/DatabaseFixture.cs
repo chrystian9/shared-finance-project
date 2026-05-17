@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SharedFinanceConsoleDB.Database;
-using SharedFinanceConsoleDB.Domain.Aggregates.UserAggregate;
 
 namespace SharedFinanceConsoleDB.Integration.Tests.Fixtures;
 
@@ -25,14 +24,6 @@ public class DatabaseFixture : IDisposable
         DbContext.Database.EnsureCreated();
 
         UnitOfWork = new UnitOfWork(DbContext);
-
-        SeedData();
-    }
-
-    private void SeedData()
-    {
-        DbContext.Users.Add(new User("Existing User"));
-        DbContext.SaveChanges();
     }
 
     public void Dispose()
