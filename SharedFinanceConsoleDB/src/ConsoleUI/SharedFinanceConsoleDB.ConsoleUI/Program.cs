@@ -1,4 +1,6 @@
-﻿using SharedFinanceConsoleDB.Application.Commands.AddAccount;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using SharedFinanceConsoleDB.Application.Commands.AddAccount;
 using SharedFinanceConsoleDB.Application.Commands.AddUser;
 using SharedFinanceConsoleDB.Application.Commands.RegisterExpense;
 using SharedFinanceConsoleDB.Application.Queries.GetUsersBalances;
@@ -6,7 +8,15 @@ using SharedFinanceConsoleDB.ConsoleUI;
 using SharedFinanceConsoleDB.Database;
 using SharedFinanceConsoleDB.Infrastructure.Repositories;
 
-using var dbContext = new SharedFinanceDBContext();
+var connectionSqlite = new SqliteConnection("Data Source=shared_finance.db");
+connectionSqlite.Open();
+
+var options = new DbContextOptionsBuilder<SharedFinanceDBContext>()
+    .UseSqlite(connectionSqlite)
+    //.LogTo(Console.WriteLine)
+    .Options;
+
+using var dbContext = new SharedFinanceDBContext(options);
 dbContext.Database.EnsureCreated();
 
 var unitOfWork = new UnitOfWork(dbContext);
@@ -24,3 +34,5 @@ var ui = new Menu(appController);
 
 ui.RunApp();
 
+connectionSqlite.Close();
+dbContext.Dispose();
